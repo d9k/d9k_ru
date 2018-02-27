@@ -1,4 +1,4 @@
-local xavante = require "xavante" 
+local xavante = require "xavante"
 local filehandler = require "xavante.filehandler"
 local cgiluahandler = require "xavante.cgiluahandler"
 local redirect = require "xavante.redirecthandler"
@@ -8,6 +8,8 @@ local conf = (require "conf.conf").sailor
 local webDir = "."
 
 local uri_map
+
+server_port = 8083
 
 if conf.friendly_urls then
     uri_map = { -- URI remapping
@@ -40,7 +42,7 @@ if conf.friendly_urls then
                 else
                     req.cmd_url = "/index.lua"
                 end
-               
+
                 return "reparse"
             end
         }
@@ -54,24 +56,24 @@ else
 end
 
 local simplerules = {
-    
+
     uri_map,
 
     { -- cgiluahandler example
       match = {"%.lp$", "%.lp/.*$", "%.lua$", "%.lua/.*$" },
       with = cgiluahandler.makeHandler (webDir)
     },
-    
+
     { -- filehandler example
       match = ".",
       with = filehandler,
       params = {baseDir = webDir}
     },
-} 
+}
 
 xavante.HTTP{
-    server = {host = "*", port = 8080},
-    
+    server = {host = "*", port = server_port},
+
     defaultHost = {
       rules = simplerules
     }

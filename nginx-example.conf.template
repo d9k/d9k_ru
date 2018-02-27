@@ -1,0 +1,11 @@
+upstream d9k_local_sailor_xavante {
+    server 127.0.0.1:8083;
+}
+
+server {
+    listen 80;
+    server_name d9k.local;
+    location / {
+        proxy_pass http://d9k_local_sailor_xavante;
+    }
+}
