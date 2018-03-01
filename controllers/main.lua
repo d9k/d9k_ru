@@ -3,6 +3,7 @@ local main = {}
 local conf = require "conf.conf"
 local debug = false
 local breakpoints = conf.debug.breakpoints and debug
+local pprint = require "thirdparty_libs.pprint".pformat
 
 -- see https://github.com/moteus/lua-log
 local LOG = require "log".new(
@@ -35,7 +36,7 @@ local LOG = require "log".new(
 function main.index(page)
 
     LOG.info("some", "info")
---    LOG.info("test table:", {test = {table = 1}})
+    LOG.info("t = " .. pprint({test = {table = 1}}))
 
     if breakpoints then
         require('mobdebug').start('127.0.0.1')
