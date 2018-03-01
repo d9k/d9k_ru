@@ -36,7 +36,7 @@ while true; do
       continue
     fi
     if [[ "$filename" == *.lua ]]; then
-      echo "File \"$filename\" changed. Restarting xavante.."
+      echo "[$(date --rfc-3339=seconds)] File \"$filename\" changed. Restarting xavante.."
       restartXavante
     fi
     #echo "$filename"
