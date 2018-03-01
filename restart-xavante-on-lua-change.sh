@@ -12,6 +12,7 @@ function restartXavante {
   fi
   lua $PROJECT_DIR/start-server.lua &
   XAVANTE_PID=$!
+  echo "Xavante process id is ${XAVANTE_PID}"
 }
 
 restartXavante
