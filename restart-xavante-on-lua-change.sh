@@ -29,7 +29,8 @@ trap killChildProcAndExit SIGINT
 while true; do
     #echo "something happened"
     #filename=$(inotifywait -t 10 -e MODIFY -r -q --format "w=%w | f=%f | e=%e" .)
-    filename=$(inotifywait -t 60 -e MODIFY -r -q --format "%w%f" "${PROJECT_DIR}")
+    #filename=$(inotifywait -r -q --format "w=%w | f=%f | e=%e" "${PROJECT_DIR}"); echo $filename; continue
+    filename=$(inotifywait -e MODIFY -e CREATE -e DELETE -r -q --format "%w%f" "${PROJECT_DIR}")
     if [[ "$filename" == "" ]]; then
       #echo "just rescan"
       continue
