@@ -40,7 +40,21 @@ local conf = {
 	debug = {
 		inspect = true,
     breakpoints = true
-	}
+	},
+
+  loggers = {
+    {
+        _class = 'log.writer.console.color'
+    },
+    {
+      _class = 'log.writer.file',
+      log_dir = './runtime/logs',
+      log_name = 'events.log',
+      flush_interval = 0,
+      close_file = true,
+      reuse = true
+    }
+  }
 }
 
 return conf

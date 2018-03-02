@@ -37,6 +37,7 @@ function main.index(page)
 
     LOG.info("some", "info")
     LOG.info("t = " .. pprint({test = {table = 1}}))
+    LOG.error("must be red")
 
     if breakpoints then
         require('mobdebug').start('127.0.0.1')
