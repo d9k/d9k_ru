@@ -5,6 +5,8 @@ local debug = false
 local breakpoints = conf.debug.breakpoints and debug
 local pprint = require "thirdparty_libs.pprint".pformat
 
+local sailor = require 'sailor'
+
 -- see https://github.com/moteus/lua-log
 local LOG = require "log".new(
   -- maximum log level
@@ -37,6 +39,7 @@ function main.index(page)
 
     LOG.info("some", "info")
     LOG.info("t = " .. pprint({test = {table = 1}}))
+    LOG.info("sailor.test = " .. sailor.test)
     LOG.error("must be red")
 
     if breakpoints then
