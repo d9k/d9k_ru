@@ -43,10 +43,13 @@ local conf = {
 	},
 
   loggers = {
-    {
-        _class = 'log.writer.console.color'
+    default = {
+      max_log_level = 'trace'
     },
-    {
+    consoleDefault = {
+      _class = 'log.writer.console.color'
+    },
+    fileDefailt = {
       _class = 'log.writer.file',
       log_dir = './runtime/logs',
       log_name = 'events.log',

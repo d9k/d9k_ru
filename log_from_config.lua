@@ -7,6 +7,29 @@ M.DEFAULT_LOGGER_PARAMS = {
   max_log_level = 'trace'
 }
 
+-- from log.lua BEGIN
+local LOG_LVL = {
+  EMERG     = 1;
+  ALERT     = 2;
+  FATAL     = 3;
+  ERROR     = 4;
+  WARNING   = 5;
+  NOTICE    = 6;
+  INFO      = 7;
+  DEBUG     = 8;
+  TRACE     = 9;
+}
+
+-- TODO see log.lua
+
+local writer_names = {}
+local LOG_LVL_NAMES = {}
+for k,v in pairs(LOG_LVL) do
+  LOG_LVL_NAMES[v] = k
+  writer_names[v]  = k:lower()
+end
+-- END from log.lua
+
 -- see https://github.com/moteus/lua-log
 --local LOG = require "log".new(
 --  -- maximum log level
@@ -36,27 +59,49 @@ M.DEFAULT_LOGGER_PARAMS = {
 
 -- conf.loggers
 
+-- creates an array of lua-log loggers from config
 function M.loggers_from_config(log_config)
-  local loggers = {}
+  local result = {}
 
-  local default_params = table_helpers(
+  local default_params = table_helpers.merge_tables(
     {},
-    M.DEFAULT_LOGGER_PARAMS
+    M.DEFAULT_LOGGER_PARAMS,
     log_config['default']
   )
 
   log_config['default'] = nil
 
-  -- TODO
-  for loggerName, loggerParams in pairs(conf.loggers) do
+  for loggerName, loggerConfigParams in pairs(conf.loggers) do
+    local loggerParams = table_helpers.merge_tables({}, default_params, loggerConfigParams)
+    local loggerClass = loggerParams._class;
+    loggerParams._class = nil;
+    local max_log_level = loggerParams.max_log_level
 
+    -- TODO add groups! add filters: groupsOnly, groupsExcept
+
+    local logWriter = require loggerClass.new(loggerParams)
+
+    result[loggerName] = {
+      object = require "log".new(
+        max_log_level, logWriter -- TODO formatter, logformat
+      )
+    }
   end -- for loggerParams
 
-  return loggers
+  return result
 end
 
+-- creates logger object - envelope for lua-log loggers
 function M.log_factory(loggers)
 
+  -- TODO get_log_writer, log, dump
+
+  -- TODO for each logger:
+--  max_lvl = lvl
+--  for i = 1, max_lvl do logger[ writer_names[i]           ] = function(...) write(i, ...) end end
+--  for i = 1, max_lvl do logger[ writer_names[i] .. '_dump'] = function(...) dump(i, ...)  end end
+--  for i = max_lvl+1, LOG_LVL_COUNT  do logger[ writer_names[i]           ] = emptyfn end
+--  for i = max_lvl+1, LOG_LVL_COUNT  do logger[ writer_names[i] .. '_dump'] = emptyfn end
 
 end
 
