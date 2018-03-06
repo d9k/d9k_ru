@@ -10,6 +10,6 @@ local log_from_config = require 'log_from_config'
 
 -- whill be restored in any file if you call `local sailor = require 'sailor'`
 sailor.log = log_from_config.log_from_config(conf.log)
-sailor.log:info('log created')
+--sailor.log:info('log created')
 
 sailor.launch()

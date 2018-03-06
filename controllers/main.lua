@@ -16,7 +16,7 @@ function main.index(page)
 end
 
 function main.action2(page)
-  page.render('action2')
+  page:render('action2')
 end
 
 return main

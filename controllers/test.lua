@@ -23,7 +23,7 @@ function test.log(page)
   sailor.log:info("some", "info")
   sailor.log:info("t = " .. pprint(t))
 --  sailor.log:info_dump(t)
-  sailor.log:info("sailor.test = " .. sailor.test)
+--  sailor.log:info("sailor.test = " .. sailor.test)
   sailor.log:error("must be red")
 
   page:render('log')
