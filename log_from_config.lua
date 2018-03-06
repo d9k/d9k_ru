@@ -110,7 +110,7 @@ function M.log_factory(loggers)
 
   local methods_names = table_helpers.append_arrays({}, writer_names, writer_dump_names, {'log', 'dump'})
 
-  -- TODO implement catergories! (logger.categories_only, logger.catergories_except)
+  -- TODO implement categories! (logger.categories_only, logger.catergories_except)
 
   for _, method_name in pairs(methods_names) do
     log[method_name] = function(self, ...)
