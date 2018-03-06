@@ -1,14 +1,14 @@
+local conf = require 'conf.conf'
+
+local debug_mode = true
+local breakpoints = conf.debug.breakpoints and debug_mode
+if breakpoints then require('mobdebug').start('127.0.0.1') end
+
 local sailor = require 'sailor'
 
-local conf = require 'conf.conf'
 local log_from_config = require 'log_from_config'
-local debug = 0
-local breakpoints = conf.debug.breakpoints and debug
+sailor.log = log_from_config.log_from_config(conf.log)
+sailor.log:info('log created')
 
-if breakpoints then
---if true then
-  require('mobdebug').start('127.0.0.1')
-end
-
-sailor.test = 5
+sailor.test = 5 -- whill be restored in any file if you call `local sailor = require 'sailor'`
 sailor.launch()

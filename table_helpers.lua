@@ -16,23 +16,41 @@ function M.merge_to_first_table(t1, t2)
     return t1
 end -- merge_to_first_table
 
--- TODO tests!
-function M.merge_tables(...)
+function M._call_method_on_arguments_pairs(method_name, arguments)
   local result
 
-  for k, v in ipairs{...} do
-    if type(v) =~ 'table' then
+  for k = 1, #arguments do
+    local v = arguments[k]
+    if type(v) ~= 'table' then
       v = {}
     end
 
     if k == 1 then
       result = v
     else
-      result = M.merge_to_first_table(result, v)
+      -- calling method by name:
+      result = M[method_name](result, v)
     end
   end -- iterate args
 
   return result
 end
+
+function M.append_to_first_array(t1, t2)
+  for i=1, #t2 do
+      t1[#t1+1] = t2[i]
+  end
+  return t1
+end
+
+-- TODO tests!
+function M.merge_tables(...)
+  return M._call_method_on_arguments_pairs('merge_to_first_table', {...})
+end
+
+function M.append_arrays(...)
+  return M._call_method_on_arguments_pairs('append_to_first_array', {...})
+end
+
 
 return M

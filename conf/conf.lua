@@ -42,14 +42,14 @@ local conf = {
     breakpoints = true
 	},
 
-  loggers = {
+  log = {
     default = {
       max_log_level = 'trace'
     },
-    consoleDefault = {
+    console_default = {
       _class = 'log.writer.console.color'
     },
-    fileDefailt = {
+    file_default = {
       _class = 'log.writer.file',
       log_dir = './runtime/logs',
       log_name = 'events.log',

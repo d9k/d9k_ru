@@ -62,6 +62,7 @@ end
 -- creates an array of lua-log loggers from config
 function M.loggers_from_config(log_config)
   local result = {}
+  local log_config_copy = table_helpers.merge_tables({}, log_config)
 
   local default_params = table_helpers.merge_tables(
     {},
@@ -69,24 +70,26 @@ function M.loggers_from_config(log_config)
     log_config['default']
   )
 
-  log_config['default'] = nil
+  log_config_copy['default'] = nil
 
-  for loggerName, loggerConfigParams in pairs(conf.loggers) do
-    local loggerParams = table_helpers.merge_tables({}, default_params, loggerConfigParams)
-    local loggerClass = loggerParams._class;
-    loggerParams._class = nil;
-    local max_log_level = loggerParams.max_log_level
+  for logger_name, logger_config_params in pairs(log_config_copy) do
+    local logger_params = table_helpers.merge_tables({}, default_params, logger_config_params)
+    local logger_class_name = logger_params._class;
+    logger_params._class = nil;
+    local max_log_level = logger_params.max_log_level
+    logger_params.max_log_level = nil
 
     -- TODO add groups! add filters: groupsOnly, groupsExcept
 
-    local logWriter = require loggerClass.new(loggerParams)
+    local logger_class = require(logger_class_name)
+    local log_writer = logger_class.new(logger_params)
 
-    result[loggerName] = {
+    result[logger_name] = {
       object = require "log".new(
-        max_log_level, logWriter -- TODO formatter, logformat
+        max_log_level, log_writer -- TODO formatter, logformat
       )
     }
-  end -- for loggerParams
+  end -- for logger_params
 
   return result
 end
@@ -94,15 +97,45 @@ end
 -- creates logger object - envelope for lua-log loggers
 function M.log_factory(loggers)
 
-  -- TODO get_log_writer, log, dump
+  local log = {loggers = loggers}
 
-  -- TODO for each logger:
+  function log:get_logger(log_writer_name)
+    return self.loggers[log_writer_name]['object']
+  end
+
+  local writer_dump_names = {}
+  for _, writer_name in ipairs(writer_names) do
+    table.insert(writer_dump_names, writer_name .. '_dump')
+  end
+
+  local methods_names = table_helpers.append_arrays({}, writer_names, writer_dump_names, {'log', 'dump'})
+
+  -- TODO implement catergories! (logger.categories_only, logger.catergories_except)
+
+  for _, method_name in pairs(methods_names) do
+    log[method_name] = function(self, ...)
+--    log[method_name] = function(...)
+      for logger_name, _ in pairs(self.loggers) do
+        local logger = self:get_logger(logger_name)
+        logger[method_name](...)
+      end
+    end -- function name
+  end -- for method name
+
+-- how it was at log.lua:
+--
 --  max_lvl = lvl
 --  for i = 1, max_lvl do logger[ writer_names[i]           ] = function(...) write(i, ...) end end
 --  for i = 1, max_lvl do logger[ writer_names[i] .. '_dump'] = function(...) dump(i, ...)  end end
 --  for i = max_lvl+1, LOG_LVL_COUNT  do logger[ writer_names[i]           ] = emptyfn end
 --  for i = max_lvl+1, LOG_LVL_COUNT  do logger[ writer_names[i] .. '_dump'] = emptyfn end
 
+  return log
+end -- M.log_factory
+
+function M.log_from_config(log_config)
+  local loggers = M.loggers_from_config(log_config)
+  return M.log_factory(loggers)
 end
 
 
