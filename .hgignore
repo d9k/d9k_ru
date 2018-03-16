@@ -8,3 +8,4 @@ syntax: regexp
 # ^vendor\/
 
 ^runtime\/logs\/
+^conf\/private_conf\.lua$

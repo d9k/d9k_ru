@@ -62,10 +62,9 @@ end
 -- creates an array of lua-log loggers from config
 function M.loggers_from_config(log_config)
   local result = {}
-  local log_config_copy = table_helpers.merge_tables({}, log_config)
+  local log_config_copy = table_helpers.merge_tables(log_config)
 
   local default_params = table_helpers.merge_tables(
-    {},
     M.DEFAULT_LOGGER_PARAMS,
     log_config['default']
   )
@@ -73,7 +72,7 @@ function M.loggers_from_config(log_config)
   log_config_copy['default'] = nil
 
   for logger_name, logger_config_params in pairs(log_config_copy) do
-    local logger_params = table_helpers.merge_tables({}, default_params, logger_config_params)
+    local logger_params = table_helpers.merge_tables(default_params, logger_config_params)
     local logger_class_name = logger_params._class;
     logger_params._class = nil;
     local max_log_level = logger_params.max_log_level
@@ -108,7 +107,7 @@ function M.log_factory(loggers)
     table.insert(writer_dump_names, writer_name .. '_dump')
   end
 
-  local methods_names = table_helpers.append_arrays({}, writer_names, writer_dump_names, {'log', 'dump'})
+  local methods_names = table_helpers.append_arrays(writer_names, writer_dump_names, {'log', 'dump'})
 
   -- TODO implement categories! (logger.categories_only, logger.catergories_except)
 

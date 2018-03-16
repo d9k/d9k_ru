@@ -1,0 +1,13 @@
+private_conf = {
+	db = {
+		development = { -- current environment
+			driver = 'postgres',
+			host = '',
+			user = '',
+			pass = '',
+			dbname = ''
+		}
+	},
+}
+
+return private_conf

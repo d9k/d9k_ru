@@ -26,6 +26,8 @@ function test.log(page)
 --  sailor.log:info("sailor.test = " .. sailor.test)
   sailor.log:error("must be red")
 
+  sailor.log:info("conf = " .. pprint(conf))
+
   page:render('log')
 end
 

@@ -1,3 +1,6 @@
+private_conf = require 'conf/private_conf'
+table_helpers = require 'table_helpers'
+
 local conf = {
 	sailor = {
 		app_name = 'D9k.ru',
@@ -16,15 +19,7 @@ local conf = {
 		hide_stack_trace = false -- false recommended for development, true recommended for production
 	},
 
-	db = {
-		development = { -- current environment
-			driver = 'mysql',
-			host = '',
-			user = '',
-			pass = '',
-			dbname = ''
-		}
-	},
+  -- db config is at the private_conf.lua
 
 	smtp = {
 		server = '',
@@ -60,4 +55,5 @@ local conf = {
   }
 }
 
+conf = table_helpers.merge_tables(conf, private_conf)
 return conf

@@ -45,11 +45,11 @@ end
 
 -- TODO tests!
 function M.merge_tables(...)
-  return M._call_method_on_arguments_pairs('merge_to_first_table', {...})
+  return M._call_method_on_arguments_pairs('merge_to_first_table', {{}, ...})
 end
 
 function M.append_arrays(...)
-  return M._call_method_on_arguments_pairs('append_to_first_array', {...})
+  return M._call_method_on_arguments_pairs('append_to_first_array', {{}, ...})
 end
 
 
