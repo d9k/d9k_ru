@@ -10,7 +10,7 @@ local breakpoints = conf.debug.breakpoints and debug_mode
 if breakpoints then require('mobdebug').start('127.0.0.1') end
 
 local sailor = require 'sailor'
-
+local db = require 'sailor.db'
 
 function test.index(page)
   page:render('index')
@@ -29,6 +29,16 @@ function test.log(page)
   sailor.log:info("conf = " .. pprint(conf))
 
   page:render('log')
+end
+
+function test.db_query(page)
+  query = 'SELECT 5*2;';
+
+  db.connect()
+  local result = db.query_one(query);
+  db.close()
+
+  page:render('db_query', {query = query, result = result})
 end
 
 return test

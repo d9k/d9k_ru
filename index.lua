@@ -1,5 +1,7 @@
 local conf = require 'conf.conf'
 
+require 'monkey_patching'
+
 local debug_mode = true
 local breakpoints = conf.debug.breakpoints and debug_mode
 if breakpoints then require('mobdebug').start('127.0.0.1') end
