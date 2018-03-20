@@ -52,5 +52,13 @@ function M.append_arrays(...)
   return M._call_method_on_arguments_pairs('append_to_first_array', {{}, ...})
 end
 
+function M.table_move_keys(t, keys_to_from)
+  local c = M.merge_tables(t)
+  for key_to, key_from in pairs(keys_to_from) do
+    c[key_to], c[key_from] = c[key_from], nil
+  end
+  return c
+end
+
 
 return M
