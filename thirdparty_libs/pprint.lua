@@ -1,4 +1,4 @@
-# from https://github.com/jagt/pprint.lua
+-- Pretty-print from https://github.com/jagt/pprint.lua
 
 local pprint = { VERSION = '0.1' }
 
