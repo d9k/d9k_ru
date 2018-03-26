@@ -9,7 +9,7 @@ function M.db_config_from_sailor_config(sailor_config, sailor_db_config_key)
   local db_config = table_helpers.merge_tables(sailor_config['db'][sailor_db_config_key])
 
   db_config = table_helpers.table_move_keys(db_config, {
-    database = 'dbname',
+    db_name = 'dbname',
     adapter = 'driver',
     password = 'pass'
   })
