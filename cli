@@ -3,7 +3,7 @@
 local argparse = require "argparse"
 local ansicolors = require "ansicolors"
 local pformat = require 'thirdparty_libs.pprint'.pformat
-local user_command_factory = require 'cli_commands.user'
+--local user_command_factory = require 'cli_commands.user'
 --local actions = require "sailor.cli"`
 
 
@@ -12,7 +12,10 @@ local parser = argparse()
   :epilog("For more info see http://sailorproject.org")
 --  :require_command(false)
 
-local user_command = user_command_factory.create(parser)
+-- TODO commands
+-- TODO security! check user name == owner of sctipt
+
+--local user_command = user_command_factory.create(parser)
 
 --parser:flag("-v --version", "Show the current Sailor version installed and exit.", false):action(actions.version)
 
