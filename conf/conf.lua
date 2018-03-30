@@ -17,20 +17,21 @@ local conf = {
 		max_upload = 1024 * 1024,
 		environment = "development",  -- this will use db configuration named development
 		hide_stack_trace = false, -- false recommended for development, true recommended for production
-    access_module = {
-      -- set in private_conf.lua!
---      default_login = '',	    -- Default login details
---      default_password = '',
-      grant_time = 4 * 24 * 50 * 60, 			-- in seconds
-      -- disable model if no users in database
-      model = 'user',					-- Setting this field will deactivate default login details and activate below fields
-      login_attributes = {'login', 'email'}, -- Allows multiple options, for example, username or email. The one used to hash the
-      password_attribute = 'password_hash', --     password should come first.
-      hashing = true
-    }
 	},
 
   -- db config is at the private_conf.lua
+
+  access_module = {
+    -- set in private_conf.lua!
+--      default_login = '',	    -- Default login details
+--      default_password = '',
+    grant_time = 4 * 24 * 50 * 60, 			-- in seconds
+    -- disable model if no users in database
+--    model = 'user',	-- Setting this field will deactivate default login details and activate below fields
+    login_attributes = {'login', 'email'}, -- Allows multiple options, for example, username or email. The one used to hash the
+    password_attribute = 'password_hash', --     password should come first.
+    hashing = true
+  },
 
 	smtp = {
 		server = '',

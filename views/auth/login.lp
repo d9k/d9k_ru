@@ -14,4 +14,12 @@
     <input type="password" placeholder="Password" name="password" required />
 
     <button type="submit" name="submit">Login</button>
-</form>
+</form
+
+<?lua if auth_ok then ?>
+  <p>ok: <?= tostring(auth_ok) ?></p>
+<?lua end ?>
+
+<?lua if auth_err then ?>
+  <p>error: <?= auth_err ?></p>
+<?lua end ?>
