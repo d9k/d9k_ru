@@ -6,6 +6,10 @@ local M = {}
 
 function M.action(args)
   print(pformat(args))
+
+  -- TODO create subparser?
+
+
 end
 
 function M.create(parser, action_callback)

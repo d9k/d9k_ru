@@ -11,6 +11,8 @@ local uri_map
 
 server_port = 8083
 
+local debug_mode = false
+
 if conf.friendly_urls then
     uri_map = { -- URI remapping
         match = "^[^%./]*/?([^%.]*)$",
@@ -18,6 +20,8 @@ if conf.friendly_urls then
         params = {
             "/",
             function(req,res,cap)
+                if debug_mode then require('mobdebug').start('127.0.0.1') end
+
                 local vars = {}
 
                 for var in string.gmatch(cap[1], '([^/]+)') do
@@ -39,6 +43,10 @@ if conf.friendly_urls then
                     end
 
                     req.cmd_url = "/index.lua?"..conf.route_parameter.."="..vars[1].."/"..get
+
+                    if req.parsed_url.query then
+                      req.cmd_url = req.cmd_url .. '&' .. req.parsed_url.query
+                    end
                 else
                     req.cmd_url = "/index.lua"
                 end

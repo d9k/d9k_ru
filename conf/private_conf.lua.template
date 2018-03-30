@@ -9,6 +9,11 @@ private_conf = {
 			dbname = '',
 		}
 	},
+  access_module = {
+    -- set in private_conf.lua!
+    -- default_login = 'admin',	    -- Default login details
+    -- default_password = 'demo123',
+  },
 }
 
 return private_conf
