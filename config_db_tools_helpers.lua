@@ -1,4 +1,4 @@
-local table_helpers = require 'table_helpers'
+local table_helpers = require 'helpers.table'
 --local pprint = require 'thirdparty_libs/pprint'.pprint
 
 --local sailor_db_config_key = 'development'

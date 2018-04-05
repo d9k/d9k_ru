@@ -1,5 +1,5 @@
 local conf = require 'conf/conf'
-local table_helpers = require 'table_helpers'
+local table_helpers = require 'helpers.table'
 
 local M = {}
 

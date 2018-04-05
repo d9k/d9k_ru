@@ -13,12 +13,13 @@ dependencies = {
    "lua-log >= 0.1.6",
    "mobdebug >= 0.70",
 
-   -- manual installation may be required:
+   -- install luasql-postgres manually!
    -- `sudo apt install libpq-dev`
    -- `sudo luarocks PGSQL_INCDIR=/usr/include/postgresql/ install luasql-postgres`
    --
    -- (lua files will be installed to ./share/lua/5.1/sailor/db/luasql_common.lua)
-   "luasql-postgres >= 2.3.5-2",
+--   "luasql-postgres >= 2.3.5-2",
+   "html-entities >= 1.2.0-0",
 }
 build = {
    type = "builtin",
