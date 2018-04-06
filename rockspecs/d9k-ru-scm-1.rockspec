@@ -19,7 +19,7 @@ dependencies = {
    --
    -- (lua files will be installed to ./share/lua/5.1/sailor/db/luasql_common.lua)
 --   "luasql-postgres >= 2.3.5-2",
-   "html-entities >= 1.2.0-0",
+   "html-entities >= 1.3.0-1",
 }
 build = {
    type = "builtin",

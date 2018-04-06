@@ -8,7 +8,7 @@
 
 <form method="post">
     <!-- <label for="login"><b>Username</b></label> -->
-    <input type="text" placeholder="Username/Email" name="login" value="<?= login ?>" required />
+    <input type="text" placeholder="Username/Email" name="login" value="<?= html_encode(login) ?>" required />
 
     <!-- <label for="psw"><b>Password</b></label> -->
     <input type="password" placeholder="Password" name="password" required />
