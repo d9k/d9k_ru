@@ -20,4 +20,10 @@ function auth.login(page)
   page:render('login', {login = login, auth_ok = auth_ok, auth_err = auth_err})
 end
 
+function auth.logout(page)
+  access.logout()
+
+  page:render('login', {logout = true})
+end
+
 return auth
