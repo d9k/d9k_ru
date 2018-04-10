@@ -19,7 +19,7 @@ function auth.login(page)
     auth_ok, auth_err = access.login(login, password)
   end
 
-  local session_data_text = session.data
+  local session_data = session.data
 
   page:render('login', {
     login = login,

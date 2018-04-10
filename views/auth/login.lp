@@ -33,7 +33,5 @@
 
 <?lua if session_data_text then ?>
   <p>Session data:</p>
-  <pre>
-    <?= session_data_text ?>
-  </pre>
+  <pre><?= session_data_text ?></pre>
 <?lua end ?>
