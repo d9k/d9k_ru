@@ -1,4 +1,5 @@
 -- TODO WRONG, not used, delete!
+-- see override/sailor_page.lua!
 -- re-merge on sailor update!
 
 local page = require 'sailor.page'
@@ -13,6 +14,12 @@ local function render_page_override(path,parms,src)
   -- mod BEGIN
   for k, v in pairs(html_helpers) do
       parms[k] = v
+  end
+
+  local session = require 'sailor.session'
+
+  if session.data.login then
+    parms.user = {login = session.data.login}
   end
   -- END mod
 

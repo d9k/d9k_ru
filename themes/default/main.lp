@@ -55,6 +55,17 @@
                 </ul>
               </li>
             </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+              <?lua if user then ?>
+                <p class="navbar-text"><?= user.login ?></p>
+                <li><a href="/auth/logout">(Logout)</a></li>
+              <?lua else ?>
+                <li><a href="/auth/login">Login</a></li>
+              <?lua end ?>
+            </ul>
+
+
           </div><!--/.nav-collapse -->
         </div>
       </div>

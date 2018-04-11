@@ -63,6 +63,12 @@ local function render_page(path,parms,src)
     for k, v in pairs(html_helpers) do
         parms[k] = v
     end
+
+    local session = require 'sailor.session'
+
+    if session.data.login then
+      parms.user = {login = session.data.login}
+    end
     -- END mod
 
     local f
