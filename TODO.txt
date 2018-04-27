@@ -1,0 +1,80 @@
++ author
++ content
++ content type: markdown+html, html
+
+class Article(Base):
+    __tablename__ = 'article'
+
+    id = Column(
+        Integer, primary_key=True,
+        info={'colanderalchemy': {
+            'title': 'id статьи',
+            'widget': deform.widget.TextInputWidget(readonly=True)
+        }})
+
+    global_id = Column(
+        postgresql.UUID,
+        index=True,
+        nullable=False,
+        server_default=text('gen_random_uuid()')
+    )
+
+    name = Column(
+        Text,
+        info={'colanderalchemy': {
+            'title': 'Название статьи',
+            'missing': None,
+        }})
+
+    system_name = Column(
+        Text,
+        nullable=False,
+        unique=True,
+        info={'colanderalchemy': {
+            'title': 'Системное имя',
+            'description': '(index для главной страницы)',
+            'validator': colander.Regex(
+                    '^[a-z0-9_\-/]+$',
+                    'Логин должен содержать только цифры и английские буквы'
+            ),
+            'missing': colander.required
+        }})
+
+//    path = Column(
+//        Text,
+//        unique=True,
+//        info={'colanderalchemy': {
+//          'title': 'Путь к статье',
+//          # TODO description to validator
+//          'description': '(должен начинаться с /)',
+//          'validator': colander.Regex(
+//                  '^[a-z0-9_\-/]+$',
+//                  'Путь должен содержать только цифры и английские буквы'
+//          ),
+//          # 'missing': colander.required
+//        }})
+
+//    active_revision_id = Column(
+//        Integer,
+//        nullable=True,
+//        info={'colanderalchemy': {
+//          'title': 'id активной ревизии',
+//          'widget': deform.widget.TextInputWidget(readonly=True),
+//          'typ': NullableInt
+//        }})
+
+    active = Column(
+        Boolean, default=True, server_default='true',
+        nullable=False,
+        info={'colanderalchemy': {
+            'title': 'Статья опубликована',
+        }})
+
+// по-умолчанию всегда шаблон!
+//
+//    is_template = Column(
+//        Boolean, default=False, server_default='false',
+//        nullable=False,
+//        info={'colanderalchemy': {
+//            'title': 'Является шаблоном',
+//        }})
