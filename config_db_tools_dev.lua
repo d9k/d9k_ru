@@ -7,6 +7,8 @@ local sailor_db_config_key = 'development'
 
 local db_config = db_tools_config_from_sailor_config(sailor_config, sailor_db_config_key)
 
+db_config.dump_name = 'db'
+
 local db_tools_config = {
   db = db_config
 }
