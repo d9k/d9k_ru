@@ -1,7 +1,75 @@
+# Articles
+
+[] database is for reading last version. revisions are stored in files (may even be compressed)
+  []
+
+`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`
+`ALTER TABLE tableA ALTER COLUMN colA SET DATA TYPE UUID USING (uuid_generate_v4());`
+
+I have psql 9.5
+
+additional article fields:
+
 + author
 + content
-+ content type: markdown+html, html
++ content_type: markdown+html, html
++ modified_by:
++ modified_at:
++ created_at:
++ created_by
 
+[] Насколько оптимален тип TEXT?
+[] Перечисляемый тип?
+
+
+```
+CREATE TABLE article (
+    id integer NOT NULL,
+    name text,
+    system_name text NOT NULL,
+    -- path text,
+    content text,
+    -- TODO! content_type: markdown+html, html
+    active boolean DEFAULT true NOT NULL,
+)
+
+CREATE TABLE object_changed(
+  id INT SERIAL,
+  author_login text NOT NULL,
+  table_name text NOT NULL,
+  global_id
+  datetime timestamp without time zone NOT NULL,
+  -- TODO action_type: modify/create/delete
+)
+```
+
+from pyragrid:
+
+
+```
+CREATE TABLE article (
+    id integer NOT NULL,
+    name text,
+    "systemName" text NOT NULL,
+    path text,
+    "activeRevisionId" integer,
+    "isTemplate" boolean DEFAULT false NOT NULL,
+    active boolean DEFAULT true NOT NULL
+);
+
+
+CREATE TABLE article_revision (
+    id integer NOT NULL,
+    "articleId" integer NOT NULL,
+    "parentRevisionId" integer,
+    code text NOT NULL,
+    "dateTime" timestamp without time zone NOT NULL,
+    "authorId" integer NOT NULL
+);
+```
+
+
+```
 class Article(Base):
     __tablename__ = 'article'
 
@@ -78,3 +146,4 @@ class Article(Base):
 //        info={'colanderalchemy': {
 //            'title': 'Является шаблоном',
 //        }})
+```
