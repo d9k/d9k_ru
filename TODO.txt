@@ -26,10 +26,11 @@ additional article fields:
 CREATE TABLE article (
     id integer NOT NULL,
     name text,
+    -- TODO! global_id UUID default uuid_generate_v4(),
     system_name text NOT NULL,
     -- path text,
     content text,
-    -- TODO! content_type: markdown+html, html
+    content_type: markdown+html, html,
     active boolean DEFAULT true NOT NULL,
 )
 
