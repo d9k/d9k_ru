@@ -66,7 +66,7 @@ local function render_page(path,parms,src)
 
     local session = require 'sailor.session'
 
-    if session.data.login then
+    if session.data and session.data.login then
       parms.user = {login = session.data.login}
     end
     -- END mod
