@@ -68,7 +68,8 @@ CREATE TABLE public.article (
     system_name text NOT NULL,
     content_type public.enum_article_content_type DEFAULT 'html'::public.enum_article_content_type,
     content text,
-    active boolean DEFAULT true NOT NULL
+    active boolean DEFAULT true NOT NULL,
+    global_id uuid DEFAULT public.uuid_generate_v4() NOT NULL
 );
 
 
@@ -177,6 +178,7 @@ SET row_security = off;
 
 COPY public.migrations (version, apply_date) FROM stdin;
 2018_04_30__01_33_13__article	2018-04-30 03:23:50.141058
+2018_05_02__05_40_00__article__global_name	2018-05-02 02:44:18.732221
 \.
 
 
