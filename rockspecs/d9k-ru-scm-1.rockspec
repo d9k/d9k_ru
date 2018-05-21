@@ -20,6 +20,11 @@ dependencies = {
    -- (lua files will be installed to ./share/lua/5.1/sailor/db/luasql_common.lua)
 --   "luasql-postgres >= 2.3.5-2",
    "html-entities >= 1.3.0-1",
+   "net-url >= 0.9",
+   "lua-requests >= 1.1",
+   -- @see https://github.com/keplerproject/md5
+   "md5 >= 1.2", -- used by lua-requests too
+   "lua-cjson = 2.1.0", -- cap version due to bug @see https://github.com/mpx/lua-cjson/issues/56 (lua-cjson is a dependency for lua-requests)
 }
 build = {
    type = "builtin",

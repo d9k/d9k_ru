@@ -52,12 +52,31 @@ function M.append_arrays(...)
   return M._call_method_on_arguments_pairs('append_to_first_array', {{}, ...})
 end
 
+function M.clone_table(t)
+  return M.merge_to_first_table({}, t)
+end
+
 function M.table_move_keys(t, keys_to_from)
   local c = M.merge_tables(t)
   for key_to, key_from in pairs(keys_to_from) do
     c[key_to], c[key_from] = c[key_from], nil
   end
   return c
+end
+
+-- @see https://stackoverflow.com/a/19266578/1760643
+-- Usage:
+-- for _,k in pairs(table_helpers.sorted_keys(mytable)) do
+--  print(k, mytable[k])
+-- end
+function M.sorted_keys(t, sortFunction)
+  local keys, len = {}, 0
+  for k,_ in pairs(t) do
+    len = len + 1
+    keys[len] = k
+  end
+  table.sort(keys, sortFunction)
+  return keys
 end
 
 

@@ -64,11 +64,9 @@ local function render_page(path,parms,src)
         parms[k] = v
     end
 
-    local session = require 'sailor.session'
+    local sailor_helpers = require 'helpers.sailor'
+    parms.user = sailor_helpers.get_user()
 
-    if session.data and session.data.login then
-      parms.user = {login = session.data.login}
-    end
     -- END mod
 
     local f

@@ -53,6 +53,9 @@
                   <li><a href="#">Separated link</a></li>
                   <li><a href="#">One more separated link</a></li>
                 </ul>
+                <?lua if user then ?>
+                  <li class=""><a href="/test">Test</a></li>
+                <? end ?>
               </li>
             </ul>
 
