@@ -81,4 +81,35 @@ M.auth = function (lastfm_api_key, lastfm_shared_secret, username, password)
 
 end
 
+-- @see https://www.last.fm/api/show/user.getRecentTracks
+-- doesn't require auth
+M.user_get_recent_tracks = function(lastfm_api_key, username, limit)
+  local log_prefix = 'in lastfm.user_get_recent_tracks: '
+
+  limit = limit or 50
+
+--  limit (Optional) : The number of results to fetch per page. Defaults to 50. Maximum is 200.
+--user (Required) : The last.fm username to fetch the recent tracks of.
+--page (Optional) : The page number to fetch. Defaults to first page.
+--from (Optional) : Beginning timestamp of a range - only display scrobbles after this time, in UNIX timestamp format (integer number of seconds since 00:00:00, January 1st 1970 UTC). This must be in the UTC time zone.
+--extended (0|1) (Optional) : Includes extended data in each artist, and whether or not the user has loved each track
+--to (Optional) : End timestamp of a range - only display scrobbles before this time, in UNIX timestamp format (integer number of seconds since 00:00:00, January 1st 1970 UTC). This must be in the UTC time zone.
+--api_key (Required) : A Last.fm API key.
+
+  local arguments = {
+    method = 'user.getRecentTracks',
+    user = username,
+    extended = 1,
+    ['format'] = 'json',
+    api_key = lastfm_api_key,
+  }
+
+  local url = M.LAST_FM_API_URL .. '?' .. net_url.buildQuery(arguments)
+  M.log(log_prefix .. 'request url: ' .. url)
+
+  response = requests.get(url)
+
+  return response
+end
+
 return M

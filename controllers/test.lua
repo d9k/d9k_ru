@@ -14,6 +14,7 @@ local access = require 'sailor.access'
 local db = require 'sailor.db'
 local sailor_helpers = require 'helpers.sailor'
 local user = sailor_helpers.get_user()
+local json = require('cjson')
 
 function test.index(page)
   page:render('index')
@@ -53,11 +54,11 @@ end
 
 function test.lastfm(page)
 
-  if user == nil then
-    page.r.status = 401
-    page:render('../error/unauthorised')
-    return
-  end
+--  if user == nil then
+--    page.r.status = 401
+--    page:render('../error/unauthorised')
+--    return
+--  end
 
   local lastfm_conf = conf.lastfm
 
@@ -66,12 +67,22 @@ function test.lastfm(page)
     sailor.log:info(...)
   end
 
-  local response = lastfm.auth(
+--  local response = lastfm.auth(
+--    lastfm_conf.lastfm_api_key,
+--    lastfm_conf.lastfm_shared_secret,
+--    lastfm_conf.lastfm_api_login,
+--    lastfm_conf.lastfm_api_password
+--  )
+
+  local response = lastfm.user_get_recent_tracks(
     lastfm_conf.lastfm_api_key,
-    lastfm_conf.lastfm_shared_secret,
-    lastfm_conf.lastfm_api_login,
-    lastfm_conf.lastfm_api_password
+    lastfm_conf.site_author_lastfm_login
   )
+
+  local json_result = response.text
+  local result = json.decode(json_result)
+
+  sailor.log:info('test/lastfm: lastfm.user_get_recent_tracks: '..pretty_format(result))
 
   page:render('lastfm', {response_dump = pretty_format(response)})
 end
