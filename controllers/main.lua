@@ -1,14 +1,9 @@
-local main = {}
-
 local conf = require "conf.conf"
-local pprint = require "thirdparty_libs.pprint".pformat
-
-local debug_mode = false
-local breakpoints = conf.debug.breakpoints and debug_mode
-
-if breakpoints then require('mobdebug').start('127.0.0.1') end
 
 local sailor = require 'sailor'
+local access = require 'sailor.access'
+
+local main = {}
 
 function main.index(page)
 

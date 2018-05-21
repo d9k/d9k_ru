@@ -36,6 +36,12 @@ while true; do
       #echo "just rescan"
       continue
     fi
+
+    if echo "$filename" | grep -q "^$PROJECT_DIR/runtime"; then
+      echo "runtime file \"$filename\" changed. no restart"
+      continue
+    fi
+
     if [[ "$filename" == *.lua ]]; then
       echo "[$(date --rfc-3339=seconds)] File \"$filename\" changed. Restarting xavante.."
       restartXavante
