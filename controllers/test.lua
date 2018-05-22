@@ -1,4 +1,4 @@
--- TODO access for admin only
+-- TODO access for admin only: write an admin_controller
 local test = {}
 
 local conf = require "conf.conf"
@@ -13,7 +13,6 @@ local sailor = require 'sailor'
 local access = require 'sailor.access'
 local db = require 'sailor.db'
 local sailor_helpers = require 'helpers.sailor'
-local user = sailor_helpers.get_user()
 local json = require('cjson')
 
 function test.index(page)
@@ -54,11 +53,12 @@ end
 
 function test.lastfm(page)
 
---  if user == nil then
---    page.r.status = 401
---    page:render('../error/unauthorised')
---    return
---  end
+  local user = sailor_helpers.get_user()
+  if user == nil then
+    page.r.status = 401
+    page:render('../error/unauthorised')
+    return
+  end
 
   local lastfm_conf = conf.lastfm
 
