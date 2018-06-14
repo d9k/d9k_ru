@@ -1,5 +1,5 @@
 -- TODO WRONG, not used, delete!
--- see override/sailor_page.lua!
+-- see override_modules/sailor_page.lua!
 -- re-merge on sailor update!
 
 local page = require 'sailor.page'
