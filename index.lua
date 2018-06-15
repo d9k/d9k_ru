@@ -13,6 +13,7 @@ sailor.log = log_from_config.log_from_config(conf.log)
 --require 'monkey_patching.sailor_page'
 require 'override_modules.override_map'
 require 'monkey_patching.sailor_db_luasql_common'
+require 'monkey_patching.sailor'
 
 --sailor.log:info('log created')
 
