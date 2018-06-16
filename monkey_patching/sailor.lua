@@ -18,26 +18,27 @@ end
 
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
 -- TODO - improve
-local function apache_friendly_url(page)
-    if conf.sailor.friendly_urls and page.GET.q and page.GET.q ~= '' then
-        local query = {}
-        for w in string.gmatch(page.GET.q, "[^/]+") do
-            table.insert(query,w)
-        end
-        for i=1,#query,2 do
-            if query[i+1] then
-                page.GET[query[i]] = query[i+1]
-            end
-        end
-    end
-end
+--local function apache_friendly_url(page)
+--    if conf.sailor.friendly_urls and page.GET.q and page.GET.q ~= '' then
+--        local query = {}
+--        for w in string.gmatch(page.GET.q, "[^/]+") do
+--            table.insert(query,w)
+--        end
+--        for i=1,#query,2 do
+--            if query[i+1] then
+--                page.GET[query[i]] = query[i+1]
+--            end
+--        end
+--    end
+--end
 
 -- Reads route GET var to decide which controller/action or default page to run.
 -- page: Page object with utilitary functions and request
 function sailor.route(page)
     local error_404, error_handler
 
-    apache_friendly_url(page)
+    -- breaking compatibility with apache
+--    apache_friendly_url(page)
 
     local route_name = page.GET[conf.sailor.route_parameter]
 
@@ -84,8 +85,32 @@ function sailor.route(page)
             return error_404()
         end
 
-        local ctr
-        local _, res = xpcall(function() ctr = require("controllers."..controller) end, error_handler)
+        local require_controller = function(controller_name)
+          local status, err_or_result = pcall(function() return require("controllers."..controller) end)
+          if status then
+            return err_or_result
+          else
+            return status
+          end
+        end
+
+--        local ctr
+        local ctr = require_controller(controller)
+        local controller_not_found = false
+
+        if not ctr then
+          controller = 'not_found'
+          ctr = require_controller(controller)
+          controller_not_found = true
+        end
+
+        if not ctr then
+          return error_404()
+        end
+
+        local _, res
+
+--        local _, res = xpcall(function() ctr = require("controllers."..controller) end, error_handler)
         if ctr then
             local custom_path = ctr.path or (ctr.conf and ctr.conf.path)
             page.controller_view_path = (custom_path and custom_path..'/views/'..controller) or 'views/'..controller
@@ -94,12 +119,26 @@ function sailor.route(page)
                 action = 'index'
             end
 
-            if not ctr[action] then return error_404() end
+--            if not ctr[action] then return error_404() end
 
-            -- run action
-            _, res = xpcall(function() return ctr[action](page) end, error_handler)
+--            -- run action
+--            _, res = xpcall(function() return ctr[action](page) end, error_handler)
+
+            if controller_not_found then
+              _, res = xpcall(function() return ctr(page, route_name) end, error_handler)
+            else
+              if ctr[action] then
+
+                -- run action
+                _, res = xpcall(function() return ctr[action](page) end, error_handler)
+              elseif ctr.not_found then
+                _, res = xpcall(function() return ctr.not_found(page, action) end, error_handler)
+              else
+                return error_404()
+              end
+            end
             if res == 404 then return error_404() end
-        end
+        end -- if ctr
 
         return res or httpd.OK or page.r.status or 200
     end
