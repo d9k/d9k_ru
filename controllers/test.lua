@@ -87,4 +87,8 @@ function test.lastfm(page)
   page:render('lastfm', {response_dump = pretty_format(response)})
 end
 
+function test.not_found(page, action)
+  page:render('not_found', {action = action})
+end
+
 return test

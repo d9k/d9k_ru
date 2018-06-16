@@ -112,21 +112,23 @@ function sailor.route(page)
 
 --        local _, res = xpcall(function() ctr = require("controllers."..controller) end, error_handler)
         if ctr then
-            local custom_path = ctr.path or (ctr.conf and ctr.conf.path)
-            page.controller_view_path = (custom_path and custom_path..'/views/'..controller) or 'views/'..controller
-            -- if no action is specified, defaults to index
-            if action == '' then
-                action = 'index'
-            end
+            if controller_not_found then
+              page.controller_view_path = 'views/'
+              _, res = xpcall(function() return ctr.not_found(page, route_name) end, error_handler)
+            else
+              local custom_path = ctr.path or (ctr.conf and ctr.conf.path)
+              page.controller_view_path = (custom_path and custom_path..'/views/'..controller) or 'views/'..controller
+              -- if no action is specified, defaults to index
+              if action == '' then
+                  action = 'index'
+              end
 
 --            if not ctr[action] then return error_404() end
 
 --            -- run action
 --            _, res = xpcall(function() return ctr[action](page) end, error_handler)
-
-            if controller_not_found then
-              _, res = xpcall(function() return ctr(page, route_name) end, error_handler)
-            else
+--              _, res = xpcall(function() return ctr(page, route_name) end, error_handler)
+--            else
               if ctr[action] then
 
                 -- run action
@@ -136,7 +138,7 @@ function sailor.route(page)
               else
                 return error_404()
               end
-            end
+            end -- controller found
             if res == 404 then return error_404() end
         end -- if ctr
 
