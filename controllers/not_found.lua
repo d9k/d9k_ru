@@ -8,7 +8,7 @@ not_found.not_found = function(page, route_name)
 
   local Article = sailor.model('article')
 
-  local article = Article:find_by_attributes({
+  local article = Article.find_by_attributes({
     url_alias = route
   })
 
