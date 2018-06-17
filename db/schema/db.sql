@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.12
--- Dumped by pg_dump version 9.5.12
+-- Dumped from database version 9.5.13
+-- Dumped by pg_dump version 9.5.13
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -69,7 +69,8 @@ CREATE TABLE public.article (
     content_type public.enum_article_content_type DEFAULT 'html'::public.enum_article_content_type,
     content text,
     active boolean DEFAULT true NOT NULL,
-    global_id uuid DEFAULT public.uuid_generate_v4() NOT NULL
+    global_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -129,6 +130,14 @@ ALTER TABLE ONLY public.article ALTER COLUMN id SET DEFAULT nextval('public.arti
 
 
 --
+-- Name: article_pkey; Type: CONSTRAINT; Schema: public; Owner: d9k_local_sailor
+--
+
+ALTER TABLE ONLY public.article
+    ADD CONSTRAINT article_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: d9k_local_sailor
 --
 
@@ -160,8 +169,8 @@ ALTER TABLE ONLY public.users
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.12
--- Dumped by pg_dump version 9.5.12
+-- Dumped from database version 9.5.13
+-- Dumped by pg_dump version 9.5.13
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -179,6 +188,8 @@ SET row_security = off;
 COPY public.migrations (version, apply_date) FROM stdin;
 2018_04_30__01_33_13__article	2018-04-30 03:23:50.141058
 2018_05_02__05_40_00__article__global_name	2018-05-02 02:44:18.732221
+2018_06_16__14_27_22__article__pkey	2018-06-16 11:30:12.327214
+2018_06_17__07_33_23__article__published	2018-06-17 04:37:06.314348
 \.
 
 
