@@ -11,6 +11,7 @@ local conf = {
 		theme = 'default',
 		layout = 'main',
 		route_parameter = 'r',
+		route_parameter_nonparsed = 'rn',
 		default_error404 = 'error/404',
 		enable_autogen = false, -- default is false, should be true only in development environment
 		friendly_urls = true,

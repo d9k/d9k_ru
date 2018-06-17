@@ -11,7 +11,7 @@ local uri_map
 
 server_port = 8083
 
-local debug_mode = false
+--local debug_mode = true
 
 if conf.friendly_urls then
     uri_map = { -- URI remapping
@@ -19,7 +19,7 @@ if conf.friendly_urls then
         with = redirect,
         params = {
             "/",
-            function(req,res,cap)
+            function (req, _res, cap)
                 if debug_mode then require('mobdebug').start('127.0.0.1') end
 
                 local vars = {}
@@ -42,7 +42,10 @@ if conf.friendly_urls then
                         get = vars[2]..get
                     end
 
-                    req.cmd_url = "/index.lua?"..conf.route_parameter.."="..vars[1].."/"..get
+--                    req.cmd_url = "/index.lua?"..conf.route_parameter.."="..vars[1].."/"..get
+                    req.cmd_url = "/index.lua?"
+                        ..conf.route_parameter_nonparsed.."="..cap[1]..'&'
+                        ..conf.route_parameter.."="..vars[1].."/"..get
 
                     if req.parsed_url.query then
                       req.cmd_url = req.cmd_url .. '&' .. req.parsed_url.query
