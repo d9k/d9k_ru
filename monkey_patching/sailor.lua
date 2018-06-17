@@ -85,23 +85,29 @@ function sailor.route(page)
             return error_404()
         end
 
+        -- return error
         local require_controller = function(controller_name)
           local status, err_or_result = pcall(function() return require("controllers."..controller) end)
           if status then
-            return err_or_result
+            local result = err_or_result
+            return result
           else
-            return status
+            local _error = err_or_result
+            return status, _error
           end
         end
 
---        local ctr
-        local ctr = require_controller(controller)
         local controller_not_found = false
+        local ctr, controller_load_error = require_controller(controller)
 
         if not ctr then
-          controller = 'not_found'
-          ctr = require_controller(controller)
-          controller_not_found = true
+          if controller_load_error:match[[module '[%a%d%.]+' not found]] then
+            controller = 'not_found'
+            ctr = require_controller(controller)
+            controller_not_found = true
+          else
+            error(controller_load_error)
+          end
         end
 
         if not ctr then
