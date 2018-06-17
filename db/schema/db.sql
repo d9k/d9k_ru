@@ -70,7 +70,8 @@ CREATE TABLE public.article (
     content text,
     active boolean DEFAULT true NOT NULL,
     global_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    published boolean DEFAULT false
+    published boolean DEFAULT false,
+    url_alias text
 );
 
 
@@ -190,6 +191,7 @@ COPY public.migrations (version, apply_date) FROM stdin;
 2018_05_02__05_40_00__article__global_name	2018-05-02 02:44:18.732221
 2018_06_16__14_27_22__article__pkey	2018-06-16 11:30:12.327214
 2018_06_17__07_33_23__article__published	2018-06-17 04:37:06.314348
+2018_06_17__09_32_34__article__url_alias	2018-06-17 06:41:25.735432
 \.
 
 

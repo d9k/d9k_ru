@@ -7,6 +7,7 @@ local article_model = {
     name = 'safe',
     -- TODO implement pattern validation! a-zA-Z0-9\-_ are allowed for this case
     system_name = 'safe',
+    url_alias = 'safe',
     content_type = valua:new().in_list({'html', 'html+markdown'}),
     content = 'safe',
     published = valua:new().boolean(),
