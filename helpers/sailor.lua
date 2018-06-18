@@ -3,6 +3,7 @@
 M = {}
 
 M.get_user = function()
+  local access = require 'access'
   local session = require 'sailor.session'
 
   local user = nil
