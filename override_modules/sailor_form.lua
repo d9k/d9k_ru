@@ -77,10 +77,10 @@ end
 -- More form inputs
 function form.textarea(model,attribute,html_options)
 	local t = pack(defaults(model,attribute,html_options))
+  t[4] = nil; t.n = 3
 	tinsert(t,1,'<textarea')
-	tinsert(t,'>')
-	tinsert(t,model[attribute] or 'asadas')
-	tinsert(t,'</textarea>')
+  -- TODO html encode!
+	tinsert(t,'>' .. (model[attribute] or '') .. '</textarea>')
 
 	return tconcat(t,' ')
 end
@@ -145,8 +145,7 @@ end
 function form.checkbox(model,attribute,label,checked,html_options)
 	local t = pack(defaults(model,attribute,html_options))
   -- why value packed??
-  t[4] = nil
-  t.n = 3
+  t[4] = nil; t.n = 3
 	local value = bool_to_int(model[attribute])
 
 	tinsert(t,1,'<input type="checkbox"')
