@@ -18,7 +18,7 @@
   <div class="form-group">
     <label>Url alias</label>
     <?= form.text(article, 'url_alias', [[class="form-control" placeholder="name"]]) ?>
-    <span class="help-block"> <?lua page:print( article.errors.url_alias or '') ?> </span>
+    <span class="help-block"> <?= article.errors.url_alias or '' ?> </span>
   </div>
 
   <div class="form-group">
@@ -31,11 +31,13 @@
           [[class="form-control"]]
        )
     %>
+    <span class="help-block"> <?= article.errors.content_type or '' ?> </span>
   </div>
 
   <div class="form-group">
     <label>Content</label>
     <?= form.textarea(article, 'content', [[class="form-control" rows="10"]]) ?>
+    <span class="help-block"> <?= article.errors.content or '' ?> </span>
   </div>
 
   <div class="form-group">
@@ -48,10 +50,5 @@
     <p><small><?= article.global_id ?></small></p>
   </div>
 
-
-  <!-- TODO content type, content, published !-->
-
-  <div class="form-group">
-
-  </div>
+	<input type="submit" value="Save" class="btn btn-primary btn-lg"/>
 </form>
