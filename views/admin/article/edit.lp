@@ -1,6 +1,10 @@
 <?lua local form = require "sailor.form" ?>
 
-<h1>Article #<?= article.id ?> edit</h1>
+<?lua if article.id then ?>
+  <h1>Article #<?= article.id ?> edit</h1>
+<?lua else ?>
+  <h1>New article</h1>
+<?lua end ?>
 
 <form method="post">
   <div class="form-group">
@@ -45,10 +49,12 @@
     <span class="help-block"> <?lua page:print( article.errors.active or '') ?> </span>
   </div>
 
-  <div class="form-group">
-    <label>Global ID</label>
-    <p><small><?= article.global_id ?></small></p>
-  </div>
+  <?lua if article.id then ?>
+    <div class="form-group">
+      <label>Global ID</label>
+      <p><small><?= article.global_id ?></small></p>
+    </div>
+  <?lua end ?>
 
 	<input type="submit" value="Save" class="btn btn-primary btn-lg"/>
 </form>

@@ -15,7 +15,7 @@ end
 local article = {
   attributes = {
     -- implement .optional() !!!
-    { id = valua:new().number() },
+    { id = valua:new().number().optional() },
     { name = 'safe' },
     -- TODO implement pattern validation! a-zA-Z0-9\-_ are allowed for this case
     { system_name = 'safe' },

@@ -1,4 +1,5 @@
 local sailor = require 'sailor'
+--local pretty_format = require 'inspect'
 
 local M = {}
 
@@ -28,6 +29,25 @@ M.article_edit = function(page)
 
     if not article:save() then
 --      local ers = article.errors
+    end
+  end
+
+  page:render('article/edit', {article=article})
+end
+
+M.article_new = function(page)
+  local Article = sailor.model('article')
+
+  local article = Article:new()
+  local ers = {}
+
+  if next(page.POST) then
+    article:from_post(page.POST)
+
+    if article:save() then
+      page:redirect('/admin/article_edit?id=' .. article.id)
+    else
+      ers = article.errors
     end
   end
 
