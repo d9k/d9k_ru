@@ -18,7 +18,7 @@ local article = {
     { id = valua:new().number().optional() },
     { name = 'safe' },
     -- TODO implement pattern validation! a-zA-Z0-9\-_ are allowed for this case
-    { system_name = 'safe' },
+    { system_name = valua:new().match("^[%d%l_-]+$").not_empty() },
     { url_alias = 'safe' },
     { content_type = valua:new().in_list({'html', 'html+markdown'}) },
     { content = 'safe' },
@@ -34,11 +34,15 @@ local article = {
   },
 
   boolean_fields = {'active'},
+  string_fields = {'system_name'},
 }
 
 article.fix_data = function(self)
   for _, attr in pairs(self.boolean_fields) do
     self[attr] = string_to_bool(self[attr])
+  end
+  for _, attr in pairs(self.string_fields) do
+    self[attr] = tostring(self[attr])
   end
 end
 

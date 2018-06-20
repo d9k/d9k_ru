@@ -21,6 +21,7 @@ M.article_edit = function(page)
   end
 
   local article = Article:find_by_id(article_id)
+  local ers
 
   article:fix_data()
 
@@ -28,7 +29,7 @@ M.article_edit = function(page)
     article:from_post(page.POST)
 
     if not article:save() then
---      local ers = article.errors
+      ers = article.errors
     end
   end
 
