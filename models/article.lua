@@ -1,6 +1,18 @@
 local valua = require 'valua'
+local table_helpers = require 'helpers.table'
 
-local article_model = {
+local string_to_bool = function (value)
+  if type(value) == 'string' then
+    if value:sub(1, 1) == 't' then
+      return true
+    else
+      return false
+    end
+  end
+  return value
+end
+
+local article = {
   attributes = {
     -- implement .optional() !!!
     { id = valua:new().number() },
@@ -19,7 +31,32 @@ local article_model = {
   db = {
     key = 'id',
     table = 'article',
-  }
+  },
+
+  boolean_fields = {'active'},
 }
 
-return article_model
+article.fix_data = function(self)
+  for _, attr in pairs(self.boolean_fields) do
+    self[attr] = string_to_bool(self[attr])
+  end
+end
+
+article.from_post = function(self, post)
+--  post = table_helpers.clone(post)
+
+  for _, attr in pairs(article.boolean_fields) do
+    local post_key = 'article:' .. attr
+
+    if post[post_key] == 'on' then
+      post[post_key] = true
+    elseif post[post_key] == nil then
+      post[post_key] = false
+    end
+  end
+
+  self:get_post(post)
+  self:fix_data()
+end
+
+return article
