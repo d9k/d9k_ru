@@ -1,3 +1,4 @@
+local sailor = require 'sailor'
 local valua = require 'valua'
 local table_helpers = require 'helpers.table'
 
@@ -25,6 +26,10 @@ local article = {
 --    { active = valua:new().boolean() },
 --    { active = valua:new().in_list({0, 1}) },
     { active = 'safe' },
+    { create_time = 'safe' },
+    { modify_time = 'safe' },
+    { revision = 'safe' },
+    { global_id = 'safe' },
     -- TODO implement uuid validation!
     -- global_id uuid DEFAULT public.uuid_generate_v4() NOT NULL
   },
@@ -61,6 +66,20 @@ article.from_post = function(self, post)
 
   self:get_post(post)
   self:fix_data()
+end
+
+-- TODO to sailor.model to run automatically (?)
+article.before_update = function(self)
+  self.revision = {value='DEFAULT', _type='raw_sql'}
+  self.modify_time = {value='DEFAULT', _type='raw_sql'}
+end
+
+article.after_update = function(self)
+  local Article = sailor.model('article')
+  local updated_article = Article:find_by_id(self.id)
+  -- TODO loop by attributes
+  self.revision = updated_article.revision
+  self.modify_time = updated_article.modify_time
 end
 
 return article

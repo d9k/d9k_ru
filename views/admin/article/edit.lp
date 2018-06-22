@@ -49,12 +49,25 @@
     <span class="help-block"> <?lua page:print( article.errors.active or '') ?> </span>
   </div>
 
+	<input type="submit" value="Save" class="btn btn-primary btn-lg"/>
+
   <?lua if article.id then ?>
+    <p></p>
     <div class="form-group">
       <label>Global ID</label>
       <p><small><?= article.global_id ?></small></p>
     </div>
+    <div class="form-group">
+      <label>Revision</label>
+      <p><small><?= article.revision ?></small></p>
+    </div>
+    <div class="form-group">
+      <label>Create time</label>
+      <p><small><?= article.create_time ?></small></p>
+    </div>
+    <div class="form-group">
+      <label>Modify time</label>
+      <p><small><?= article.modify_time ?></small></p>
+    </div>
   <?lua end ?>
-
-	<input type="submit" value="Save" class="btn btn-primary btn-lg"/>
 </form>

@@ -1,5 +1,5 @@
 -- mod: ability to save attrs as raw sql:
--- obj.save_time = {value = 'NOW()', type='raw_sql'}
+-- obj.save_time = {value = 'NOW()', _type='raw_sql'}
 
 --------------------------------------------------------------------------------
 -- model.lua, v0.10.4: basic model creator, uses db module
@@ -31,7 +31,7 @@ setmetatable(model,o)
 
 -- mod BEGIN
 local attr_is_raw_sql = function(attr)
-  return type(attr) == 'table' and attr.type == 'raw_sql'
+  return type(attr) == 'table' and attr._type == 'raw_sql'
 end
 -- END mod
 
@@ -158,7 +158,7 @@ function model:insert()
 					table.insert(values,tostring(self[attr]))
         -- mod BEGIN
         elseif attr_is_raw_sql(self[attr]) then
-          table.insert(attr.value)
+          table.insert(self[attr].value)
         -- END mod
 				else
 					table.insert(values,"'"..db.escape(self[attr]).."'")
@@ -189,7 +189,7 @@ function model:update()
 				string = string.."null"
       -- mod BEGIN
       elseif attr_is_raw_sql(self[attr]) then
-        string = string .. attr.value
+        string = string .. self[attr].value
       -- END mod
 			elseif type(self[attr]) == 'number' then
 				string = string..self[attr]

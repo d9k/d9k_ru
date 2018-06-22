@@ -28,9 +28,13 @@ M.article_edit = function(page)
   if next(page.POST) then
     article:from_post(page.POST)
 
+    article:before_update()
+
     if not article:save() then
       ers = article.errors
     end
+
+    article:after_update()
   end
 
   page:render('article/edit', {article=article})
