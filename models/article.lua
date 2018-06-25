@@ -40,6 +40,7 @@ local article = {
 
   boolean_fields = {'active'},
   string_fields = {'system_name'},
+  revision_changed_fields = {'name', 'system_name', 'content', 'url_alias', 'content_type'}
 }
 
 article.fix_data = function(self)
@@ -53,7 +54,6 @@ end
 
 article.from_post = function(self, post)
 --  post = table_helpers.clone(post)
-
   for _, attr in pairs(article.boolean_fields) do
     local post_key = 'article:' .. attr
 
@@ -68,18 +68,54 @@ article.from_post = function(self, post)
   self:fix_data()
 end
 
--- TODO to sailor.model to run automatically (?)
-article.before_update = function(self)
-  self.revision = {value='DEFAULT', _type='raw_sql'}
-  self.modify_time = {value='DEFAULT', _type='raw_sql'}
+article.get_model = function()
+  return sailor.model('article')
 end
 
-article.after_update = function(self)
-  local Article = sailor.model('article')
-  local updated_article = Article:find_by_id(self.id)
+-- TODO to sailor.model to run automatically (?)
+article.before_update = function(self)
+  local ModelClass = article.get_model()
+  local model_in_db = ModelClass:find_by_id(self.id)
+
+  self.modify_time = {value='DEFAULT', _type='raw_sql'}
+  -- TODO save modified_by
+
+  local new_revision = false
+  for _, attr_name in pairs(article.revision_changed_fields) do
+    if model_in_db[attr_name] ~= self[attr_name] then
+      new_revision = true
+      break
+    end
+  end
+
+  if new_revision then
+    self.revision = {value='DEFAULT', _type='raw_sql'}
+  end
+end
+
+article.after_save = function(self)
+  local ModelClass = article.get_model()
+  local updated_model = ModelClass:find_by_id(self.id)
   -- TODO loop by attributes
-  self.revision = updated_article.revision
-  self.modify_time = updated_article.modify_time
+  self.revision = updated_model.revision
+  self.modify_time = updated_model.modify_time
+  -- TODO save to file
+end
+
+article.get_backup_file_name = function(self)
+  return self.global_id .. '_' .. self.name
+end
+
+article.get_backup_file_name_with_revision = function(self)
+  return self.global_id .. '_' .. self.name .. '_' .. self.revision
+end
+
+article.save_to_file = function (self, file_name)
+--  self.attributes
+end
+
+article.load_from_file = function (self, file_name)
+--  article.attributes
 end
 
 return article

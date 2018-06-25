@@ -95,11 +95,49 @@ function model:save(validate)
 		end
 	end
 	local id = self[self.db.key]
+
+  -- mod BEGIN
+  local result
+  if self['before_save'] then
+    self['before_save'](self)
+  end
+
+  -- END mod
+
 	if not id or not self:find_by_id(id) then
-		return self:insert()
+    -- mod BEGIN
+    if self['before_insert'] then
+      self['before_insert'](self)
+    end
+
+--		return self:insert()
+		result = self:insert()
+
+    if self['after_insert'] then
+      self['after_insert'](self)
+    end
+    -- END mod
 	else
-		return self:update()
+    -- mod BEGIN
+    if self['before_update'] then
+      self['before_update'](self)
+    end
+
+--		return self:update()
+		result = self:update()
+
+    if self['after_update'] then
+      self['after_update'](self)
+    end
 	end
+
+  -- mod BEGIN
+  if self['after_save'] then
+    self['after_save'](self)
+  end
+
+  return result
+  -- END mod
 end
 
 -- Based on the relations set for our model,
