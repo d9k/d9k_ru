@@ -9,4 +9,5 @@ syntax: regexp
 
 ^runtime\/logs\/
 ^runtime\/tmp\/
+^runtime\/backup_models\/
 ^conf\/private_conf\.lua$

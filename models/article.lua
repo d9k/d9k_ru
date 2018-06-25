@@ -1,6 +1,17 @@
 local sailor = require 'sailor'
 local valua = require 'valua'
 local table_helpers = require 'helpers.table'
+local pretty_format = require 'inspect'
+local files_helpers = require 'helpers.files'
+
+local penlight_path = require 'pl.path'
+local penlight_dir = require 'pl.dir'
+
+local guid_sub = function(guid, length)
+  length = length or 10
+  local g = guid:gsub('%-', '')
+  return g:sub(1, length)
+end
 
 local string_to_bool = function (value)
   if type(value) == 'string' then
@@ -40,7 +51,8 @@ local article = {
 
   boolean_fields = {'active'},
   string_fields = {'system_name'},
-  revision_changed_fields = {'name', 'system_name', 'content', 'url_alias', 'content_type'}
+  revision_changed_fields = {'name', 'system_name', 'content', 'url_alias', 'content_type'},
+  model_name = 'article'
 }
 
 article.fix_data = function(self)
@@ -69,7 +81,7 @@ article.from_post = function(self, post)
 end
 
 article.get_model = function()
-  return sailor.model('article')
+  return sailor.model(article.model_name)
 end
 
 -- TODO to sailor.model to run automatically (?)
@@ -100,22 +112,53 @@ article.after_save = function(self)
   self.revision = updated_model.revision
   self.modify_time = updated_model.modify_time
   -- TODO save to file
+
+  self:save_backups()
 end
 
-article.get_backup_file_name = function(self)
-  return self.global_id .. '_' .. self.name
+article.save_backups = function(self)
+  penlight_dir.makepath(self:get_backup_folder_path())
+  self:save_to_file(self:get_backup_file_path())
+  penlight_dir.makepath(self:get_backup_folder_revisions_path())
+  self:save_to_file(self:get_backup_file_path_with_revision())
 end
 
-article.get_backup_file_name_with_revision = function(self)
-  return self.global_id .. '_' .. self.name .. '_' .. self.revision
+-- backup functionality to mixin class
+
+article.get_backup_folder_path = function(self)
+  return 'runtime/backup_models/' .. article.model_name
+end
+
+article.get_backup_folder_revisions_path = function(self)
+  return self:get_backup_folder_path() .. '/' .. self.global_id
+end
+
+article.get_backup_file_path = function(self)
+  return self:get_backup_folder_path() .. '/'
+      .. self.model_name .. '__' .. guid_sub(self.global_id) .. '__' .. self.system_name .. '.lua'
+end
+
+article.get_backup_file_path_with_revision = function(self)
+  return self:get_backup_folder_revisions_path() .. '/'
+      .. self.model_name .. '__' .. guid_sub(self.global_id) .. '__' .. self.system_name .. '__' .. guid_sub(self.revision) .. '.lua'
 end
 
 article.save_to_file = function (self, file_name)
---  self.attributes
+  local data = {}
+
+  for _,n in pairs(self.attributes) do
+		for attr,_ in pairs(n) do
+      data[attr] = self[attr]
+    end
+  end
+
+  local data_lua_code = 'return ' .. pretty_format(data)
+
+  files_helpers.file_put_contents(file_name, data_lua_code)
 end
 
 article.load_from_file = function (self, file_name)
---  article.attributes
+--  TODO run lua file in save environment!
 end
 
 return article
