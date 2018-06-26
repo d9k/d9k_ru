@@ -24,6 +24,14 @@ local string_to_bool = function (value)
   return value
 end
 
+-- https://stackoverflow.com/a/5904469/1760643
+-- example sql datetime: 2018-06-25 04:18:11.755792
+local sql_date_to_timestamp = function (sql_date_string)
+  local sql_date_pattern = "(%d+)-(%d+)-(%d+) (%d+):(%d+):(%d+)"
+  local year, month, day, hour, minute, seconds = sql_date_string:match(sql_date_pattern)
+  return os.time({year = year, month = month, day = day, hour = hour, min = minute, sec = seconds})
+end
+
 local article = {
   attributes = {
     -- implement .optional() !!!
@@ -139,8 +147,12 @@ article.get_backup_file_path = function(self)
 end
 
 article.get_backup_file_path_with_revision = function(self)
+  local modify_timestamp = sql_date_to_timestamp(self.modify_time)
+  local modify_time_string = files_helpers.time_string(modify_timestamp)
+
   return self:get_backup_folder_revisions_path() .. '/'
-      .. self.model_name .. '__' .. guid_sub(self.global_id) .. '__' .. self.system_name .. '__' .. guid_sub(self.revision) .. '.lua'
+      .. self.model_name .. '__' .. guid_sub(self.global_id, 4) .. '__'
+      .. modify_time_string .. '__' .. self.system_name .. '__' .. guid_sub(self.revision, 4) .. '.lua'
 end
 
 article.save_to_file = function (self, file_name)
