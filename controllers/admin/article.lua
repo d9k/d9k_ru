@@ -59,4 +59,19 @@ M.article_new = function(page)
   page:render('article/edit', {article=article})
 end
 
+M.article_revisions = function (page)
+  local Article = sailor.model('article')
+
+  local article_global_id = page.GET.global_id
+
+  if not article_global_id then
+    error('global_id not set')
+  end
+
+  local article = Article:find_by_attributes {global_id = article_global_id}
+  local revisions = article:load_revisions()
+
+  page:render('article/revisions', {article=article, revisions=revisions})
+end
+
 return M
