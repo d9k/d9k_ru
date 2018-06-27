@@ -1,5 +1,5 @@
-private_conf = require 'conf.private_conf'
-table_helpers = require 'helpers.table'
+local private_conf = require 'conf.private_conf'
+local table_helpers = require 'helpers.table'
 
 local conf = {
 	sailor = {

@@ -1,17 +1,8 @@
 local sailor = require 'sailor'
 local valua = require 'valua'
 local table_helpers = require 'helpers.table'
-local pretty_format = require 'inspect'
-local files_helpers = require 'helpers.files'
 
-local penlight_path = require 'pl.path'
-local penlight_dir = require 'pl.dir'
-
-local guid_sub = function(guid, length)
-  length = length or 10
-  local g = guid:gsub('%-', '')
-  return g:sub(1, length)
-end
+local backup_mixin = require 'models.mixins.model_backup_mixin'
 
 local string_to_bool = function (value)
   if type(value) == 'string' then
@@ -22,14 +13,6 @@ local string_to_bool = function (value)
     end
   end
   return value
-end
-
--- https://stackoverflow.com/a/5904469/1760643
--- example sql datetime: 2018-06-25 04:18:11.755792
-local sql_date_to_timestamp = function (sql_date_string)
-  local sql_date_pattern = "(%d+)-(%d+)-(%d+) (%d+):(%d+):(%d+)"
-  local year, month, day, hour, minute, seconds = sql_date_string:match(sql_date_pattern)
-  return os.time({year = year, month = month, day = day, hour = hour, min = minute, sec = seconds})
 end
 
 local article = {
@@ -121,56 +104,10 @@ article.after_save = function(self)
   self.modify_time = updated_model.modify_time
   -- TODO save to file
 
+  -- in backup_mixin
   self:save_backups()
 end
 
-article.save_backups = function(self)
-  penlight_dir.makepath(self:get_backup_folder_path())
-  self:save_to_file(self:get_backup_file_path())
-  penlight_dir.makepath(self:get_backup_folder_revisions_path())
-  self:save_to_file(self:get_backup_file_path_with_revision())
-end
-
--- backup functionality to mixin class
-
-article.get_backup_folder_path = function(self)
-  return 'runtime/backup_models/' .. article.model_name
-end
-
-article.get_backup_folder_revisions_path = function(self)
-  return self:get_backup_folder_path() .. '/' .. self.global_id
-end
-
-article.get_backup_file_path = function(self)
-  return self:get_backup_folder_path() .. '/'
-      .. self.model_name .. '__' .. guid_sub(self.global_id) .. '__' .. self.system_name .. '.lua'
-end
-
-article.get_backup_file_path_with_revision = function(self)
-  local modify_timestamp = sql_date_to_timestamp(self.modify_time)
-  local modify_time_string = files_helpers.time_string(modify_timestamp)
-
-  return self:get_backup_folder_revisions_path() .. '/'
-      .. self.model_name .. '__' .. guid_sub(self.global_id, 4) .. '__'
-      .. modify_time_string .. '__' .. self.system_name .. '__' .. guid_sub(self.revision, 4) .. '.lua'
-end
-
-article.save_to_file = function (self, file_name)
-  local data = {}
-
-  for _,n in pairs(self.attributes) do
-		for attr,_ in pairs(n) do
-      data[attr] = self[attr]
-    end
-  end
-
-  local data_lua_code = 'return ' .. pretty_format(data)
-
-  files_helpers.file_put_contents(file_name, data_lua_code)
-end
-
-article.load_from_file = function (self, file_name)
---  TODO run lua file in save environment!
-end
+backup_mixin.mixin(article)
 
 return article
