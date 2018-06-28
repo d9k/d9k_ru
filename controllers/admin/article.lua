@@ -3,7 +3,13 @@ local sailor = require 'sailor'
 
 local M = {}
 
+local breadcrumbs_add_articles = function(page)
+  table.insert(page.breadcrumbs, {url='/admin/article', caption='Articles'})
+end
+
 M.article = function(page)
+  breadcrumbs_add_articles(page)
+
   local Article = sailor.model('article')
 
   local articles = Article:find_all()
@@ -12,6 +18,8 @@ M.article = function(page)
 end
 
 M.article_edit = function(page)
+  breadcrumbs_add_articles(page)
+
   local Article = sailor.model('article')
 
   local article_id = page.GET.id
@@ -41,6 +49,8 @@ M.article_edit = function(page)
 end
 
 M.article_new = function(page)
+  breadcrumbs_add_articles(page)
+
   local Article = sailor.model('article')
 
   local article = Article:new()
@@ -60,6 +70,8 @@ M.article_new = function(page)
 end
 
 M.article_revisions = function (page)
+  breadcrumbs_add_articles(page)
+
   local Article = sailor.model('article')
 
   local article_global_id = page.GET.global_id
@@ -70,6 +82,8 @@ M.article_revisions = function (page)
 
   local article = Article:find_by_attributes {global_id = article_global_id}
   local revisions = article:load_revisions()
+
+  table.insert(page.breadcrumbs, {url='/admin/article_edit?id=' .. article.id, caption='Article #'..article.id})
 
   page:render('article/revisions', {article=article, revisions=revisions})
 end

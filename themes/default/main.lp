@@ -91,6 +91,16 @@
 
       <!-- Begin page content -->
       <div class="container">
+        <?lua if page.breadcrumbs then ?>
+          <ul class="breadcrumb">
+            <?lua for i, b_crumb in ipairs(page.breadcrumbs) do ?>
+              <li><a href="<?= b_crumb.url ?>"
+                     class="<?= i == #(page.breadcrumbs) and 'active' or '' ?>"
+                  ><?= b_crumb.caption ?></a></li>
+            <?lua end ?>
+          </ul>
+        <?lua end ?>
+
         {{content}}
       </div>
     </div>

@@ -14,6 +14,8 @@ admin.before = function(page)
     return false
   end
 
+  page.breadcrumbs = {{url='/admin', caption='Admin'}}
+
   return true
 end
 
