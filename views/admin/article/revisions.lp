@@ -17,11 +17,8 @@
     </div>
   </div>
 </div>
-<hr />
 
 <h3>Another revisions</h3>
-
-<hr />
 
 <?lua for revision_path, revision in pairs(revisions) do ?>
   <?lua if article.revision ~= revision.revision then ?>
