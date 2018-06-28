@@ -88,4 +88,33 @@ M.article_revisions = function (page)
   page:render('article/revisions', {article=article, revisions=revisions})
 end
 
+M.article_restore_revision = function(page)
+  local Article = sailor.model('article')
+
+  local article_global_id = page.GET.article_global_id
+
+  if not article_global_id then
+    error('article_global_id not set')
+  end
+
+  local revision_file_path = page.GET.revision_file_path
+
+  if not revision_file_path then
+    error('revision_file_path not set')
+  end
+
+  local article = Article:find_by_attributes {global_id = article_global_id}
+
+--  article.revision = revision_global_id
+
+  -- see model_backup_mixin
+--  local backup_file_path = article:get_backup_file_path_with_revision()
+
+  -- TODO secure!
+  article:set_attrs_from_file(revision_file_path)
+  article:save()
+
+  page:redirect('/admin/article_revisions?global_id=' .. article.global_id)
+end
+
 return M

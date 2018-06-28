@@ -80,19 +80,20 @@ article.before_update = function(self)
   local ModelClass = article.get_model()
   local model_in_db = ModelClass:find_by_id(self.id)
 
-  self.modify_time = {value='DEFAULT', _type='raw_sql'}
-  -- TODO save modified_by
-
-  local new_revision = false
-  for _, attr_name in pairs(article.revision_changed_fields) do
-    if model_in_db[attr_name] ~= self[attr_name] then
-      new_revision = true
-      break
+  if model_in_db.revision == self.revision then
+    local new_revision = false
+    for _, attr_name in pairs(article.revision_changed_fields) do
+      if model_in_db[attr_name] ~= self[attr_name] then
+        new_revision = true
+        break
+      end
     end
-  end
 
-  if new_revision then
-    self.revision = {value='DEFAULT', _type='raw_sql'}
+    if new_revision then
+      self.revision = {value='DEFAULT', _type='raw_sql'}
+      self.modify_time = {value='DEFAULT', _type='raw_sql'}
+      -- TODO save modified_by
+    end
   end
 end
 
