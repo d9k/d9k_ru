@@ -75,10 +75,7 @@ M.article_revisions = function (page)
   local Article = sailor.model('article')
 
   local article_global_id = page.GET.global_id
-
-  if not article_global_id then
-    error('global_id not set')
-  end
+      or error('global_id not set')
 
   local article = Article:find_by_attributes {global_id = article_global_id}
   local revisions = article:load_revisions()
@@ -91,19 +88,13 @@ end
 M.article_restore_revision = function(page)
   local Article = sailor.model('article')
 
-  local article_global_id = page.GET.article_global_id
-
-  if not article_global_id then
-    error('article_global_id not set')
-  end
+--  local article_global_id = page.GET.article_global_id
+--      or error('article_global_id not set')
 
   local revision_file_path = page.GET.revision_file_path
+      or error('revision_file_path not set')
 
-  if not revision_file_path then
-    error('revision_file_path not set')
-  end
-
-  local article = Article:find_by_attributes {global_id = article_global_id}
+  local article = Article:new()
 
 --  article.revision = revision_global_id
 
@@ -112,6 +103,14 @@ M.article_restore_revision = function(page)
 
   -- TODO secure!
   article:set_attrs_from_file(revision_file_path)
+
+  local existing_article = article:find_by_attributes {global_id = article.global_id}
+
+  if existing_article then
+    existing_article:set_attrs_from_file(revision_file_path)
+    article = existing_article
+  end
+
   article:save()
 
   page:redirect('/admin/article_revisions?global_id=' .. article.global_id)

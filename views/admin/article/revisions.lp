@@ -49,7 +49,7 @@
     </div>
 
     <p>
-      <a href="/admin/article_restore_revision?article_global_id=<?= article.global_id ?>&revision_file_path=<?= revision_path ?>"
+      <a href="/admin/article_restore_revision?revision_file_path=<?= revision_path ?>"
       >restore to this revision</a>
     </p>
 
