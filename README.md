@@ -2,8 +2,12 @@
 
 ## Installation
 
+    sudo apt install gcc git libssl-dev
+
 At first install last version of sailor framework from [sailor repo](https://github.com/sailorproject/sailor):
 
+    git clone https://github.com/sailorproject/sailor.git
+    cd sailor
     luarocks install rockspecs/sailor-current-1.rockspec
 
 at cloned sailor repo folder.
