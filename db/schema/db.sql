@@ -15,35 +15,35 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: 
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
 
 --
--- Name: enum_article_content_type; Type: TYPE; Schema: public; Owner: d9k_local_sailor
+-- Name: enum_article_content_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public.enum_article_content_type AS ENUM (
@@ -52,14 +52,12 @@ CREATE TYPE public.enum_article_content_type AS ENUM (
 );
 
 
-ALTER TYPE public.enum_article_content_type OWNER TO d9k_local_sailor;
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: article; Type: TABLE; Schema: public; Owner: d9k_local_sailor
+-- Name: article; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.article (
@@ -78,10 +76,8 @@ CREATE TABLE public.article (
 );
 
 
-ALTER TABLE public.article OWNER TO d9k_local_sailor;
-
 --
--- Name: article_id_seq; Type: SEQUENCE; Schema: public; Owner: d9k_local_sailor
+-- Name: article_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.article_id_seq
@@ -92,17 +88,15 @@ CREATE SEQUENCE public.article_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.article_id_seq OWNER TO d9k_local_sailor;
-
 --
--- Name: article_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: d9k_local_sailor
+-- Name: article_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.article_id_seq OWNED BY public.article.id;
 
 
 --
--- Name: migrations; Type: TABLE; Schema: public; Owner: d9k_local_sailor
+-- Name: migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.migrations (
@@ -111,10 +105,8 @@ CREATE TABLE public.migrations (
 );
 
 
-ALTER TABLE public.migrations OWNER TO d9k_local_sailor;
-
 --
--- Name: users; Type: TABLE; Schema: public; Owner: adm1104
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.users (
@@ -124,17 +116,15 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO adm1104;
-
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: d9k_local_sailor
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.article ALTER COLUMN id SET DEFAULT nextval('public.article_id_seq'::regclass);
 
 
 --
--- Name: article_pkey; Type: CONSTRAINT; Schema: public; Owner: d9k_local_sailor
+-- Name: article_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.article
@@ -142,7 +132,7 @@ ALTER TABLE ONLY public.article
 
 
 --
--- Name: migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: d9k_local_sailor
+-- Name: migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.migrations
@@ -150,7 +140,7 @@ ALTER TABLE ONLY public.migrations
 
 
 --
--- Name: users_email_unique; Type: CONSTRAINT; Schema: public; Owner: adm1104
+-- Name: users_email_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -158,7 +148,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: adm1104
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -186,7 +176,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Data for Name: migrations; Type: TABLE DATA; Schema: public; Owner: d9k_local_sailor
+-- Data for Name: migrations; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.migrations (version, apply_date) FROM stdin;
