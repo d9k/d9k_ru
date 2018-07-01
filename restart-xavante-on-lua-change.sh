@@ -5,6 +5,12 @@
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 XAVANTE_PID=
 
+cd ${PROJECT_DIR}
+
+function stopOtherInstances {
+   ps aux | grep -i "${PROJECT_DIR}/start-server.lua" | grep -v "^grep" | awk {'print $2'} | xargs -I __file__ kill -9 __file__  2>/dev/null
+}
+
 function restartXavante {
   if [[ -n "$XAVANTE_PID" ]]; then
     kill $XAVANTE_PID
@@ -15,17 +21,24 @@ function restartXavante {
   echo "Xavante process id is ${XAVANTE_PID}"
 }
 
-restartXavante
+stopOtherInstances #()
+restartXavante #()
 
 # kill child processes on exit:
 # (https://stackoverflow.com/a/11697822/1760643)
 
 function killChildProcAndExit {
-  jobs -p | xargs kill
+  jobs -p | xargs kill 2>/dev/null
   exit
 }
 
-trap killChildProcAndExit SIGINT
+function onSigKill {
+  stopOtherInstances #()
+  killChildProcAndExit #()
+}
+
+# unable to set SIGKILL trap on Linux (WHAAAAI?)
+trap onSigKill SIGINT SIGTERM
 
 while true; do
     #echo "something happened"
