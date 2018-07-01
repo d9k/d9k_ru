@@ -27,3 +27,6 @@ The login to created database with psql with superuser (!) and run the following
     CREATE EXTENSION IF NOT EXISTS plpgsql;
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+## Autostart daemon
+
+init.d script can be generated with https://gist.github.com/naholyr/4275302, provide restart-xavante-on-lua-change.sh as SCRIPT variable value to init.d script template
