@@ -9,4 +9,4 @@ luarocks_command="luarocks build --local --only-deps rockspecs/d9k-ru-scm-1.rock
 echo "+ $luarocks_command"
 $luarocks_command
 
-echo "install luasql-postgres manually!"
+echo "install luasql-postgres manually (see README.md for instructions)!"
