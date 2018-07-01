@@ -71,7 +71,10 @@ CREATE TABLE public.article (
     active boolean DEFAULT true NOT NULL,
     global_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     published boolean DEFAULT false,
-    url_alias text
+    url_alias text,
+    revision uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    create_time timestamp without time zone DEFAULT timezone('utc'::text, now()),
+    modify_time timestamp without time zone DEFAULT timezone('utc'::text, now())
 );
 
 
@@ -192,6 +195,7 @@ COPY public.migrations (version, apply_date) FROM stdin;
 2018_06_16__14_27_22__article__pkey	2018-06-16 11:30:12.327214
 2018_06_17__07_33_23__article__published	2018-06-17 04:37:06.314348
 2018_06_17__09_32_34__article__url_alias	2018-06-17 06:41:25.735432
+2018_06_22__06_34_21__article__add__revision__and__create_time	2018-06-22 03:52:48.61804
 \.
 
 
