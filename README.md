@@ -18,3 +18,12 @@ Then install luasql-postgres manually!
 
 `sudo apt install libpq-dev`
 `luarocks PGSQL_INCDIR=/usr/include/postgresql/ install luasql-postgres`
+
+## Database
+
+At first create database and user with permissions for this database.
+The login to created database with psql with superuser (!) and run the following:
+
+    CREATE EXTENSION IF NOT EXISTS plpgsql;
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
