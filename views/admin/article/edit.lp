@@ -1,7 +1,7 @@
 <?lua local form = require "sailor.form" ?>
 
-<?lua if article.id then ?>
-  <h1>Article #<?= article.id ?>. <?= article.system_name ?> edit</h1>
+<?lua if article.system_name then ?>
+  <h1>Article <?= article.system_name ?> edit</h1>
 <?lua else ?>
   <h1>New article</h1>
 <?lua end ?>
