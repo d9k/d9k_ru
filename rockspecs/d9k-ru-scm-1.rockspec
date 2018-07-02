@@ -26,6 +26,8 @@ dependencies = {
    "md5 >= 1.2", -- used by lua-requests too
    "lua-cjson = 2.1.0", -- cap version due to bug @see https://github.com/mpx/lua-cjson/issues/56 (lua-cjson is a dependency for lua-requests)
    "penlight >= 1.5",
+   "inspect",
+   "luautf8",
 }
 build = {
    type = "builtin",
