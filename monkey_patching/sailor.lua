@@ -42,6 +42,8 @@ function sailor.route(page)
 
     local route_name = page.GET[conf.sailor.route_parameter]
 
+    page.breadcrumbs = {}
+
     -- Error for controller or action not found
     error_404 = function()
         local _, res
