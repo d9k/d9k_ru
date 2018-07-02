@@ -240,7 +240,12 @@ function model:update()
 		end
 	end
 	local update_string = table.concat (updates, ', ')
-	local query = "update "..self.db.table.." set "..update_string.." where "..key.." = "..db.escape(self[key])..";"
+  -- mod BEGIN
+--	local query = "update "..self.db.table.." set "..update_string.." where "..key.." = "..db.escape(self[key])..";"
+
+  -- added quotes as in self:find_by_id()
+  local query = "update "..self.db.table.." set "..update_string.." where "..key.." = '"..db.escape(self[key]).."';"
+  -- END mod
 
 	local u = (db.query(query) ~= 0)
 	db_close()

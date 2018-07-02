@@ -61,38 +61,17 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE public.article (
-    id integer NOT NULL,
     name text,
     system_name text NOT NULL,
     content_type public.enum_article_content_type DEFAULT 'html'::public.enum_article_content_type,
     content text,
     active boolean DEFAULT true NOT NULL,
     global_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    published boolean DEFAULT false,
     url_alias text,
     revision uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     create_time timestamp without time zone DEFAULT timezone('utc'::text, now()),
     modify_time timestamp without time zone DEFAULT timezone('utc'::text, now())
 );
-
-
---
--- Name: article_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.article_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: article_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.article_id_seq OWNED BY public.article.id;
 
 
 --
@@ -117,18 +96,11 @@ CREATE TABLE public.users (
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.article ALTER COLUMN id SET DEFAULT nextval('public.article_id_seq'::regclass);
-
-
---
 -- Name: article_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.article
-    ADD CONSTRAINT article_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT article_pkey PRIMARY KEY (system_name);
 
 
 --
@@ -186,6 +158,8 @@ COPY public.migrations (version, apply_date) FROM stdin;
 2018_06_17__07_33_23__article__published	2018-06-17 04:37:06.314348
 2018_06_17__09_32_34__article__url_alias	2018-06-17 06:41:25.735432
 2018_06_22__06_34_21__article__add__revision__and__create_time	2018-06-22 03:52:48.61804
+2018_07_02__04_03_25__article__rm_published	2018-07-02 01:05:30.760006
+2018_07_02__04_24_32__article__rm_id	2018-07-02 01:29:55.893268
 \.
 
 

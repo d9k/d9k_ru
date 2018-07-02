@@ -22,13 +22,13 @@ M.article_edit = function(page)
 
   local Article = sailor.model('article')
 
-  local article_id = page.GET.id
+  local system_name = page.GET.pk
 
-  if not article_id then
-    error('article_id not set')
+  if not system_name then
+    error('pk url param not set')
   end
 
-  local article = Article:find_by_id(article_id)
+  local article = Article:find_by_id(system_name)
   local ers
 
   article:fix_data()
@@ -80,7 +80,7 @@ M.article_revisions = function (page)
   local article = Article:find_by_attributes {global_id = article_global_id}
   local revisions = article:load_revisions()
 
-  table.insert(page.breadcrumbs, {url='/admin/article_edit?id=' .. article.id, caption='Article #'..article.id})
+  table.insert(page.breadcrumbs, {url='/admin/article_edit?pk=' .. article.system_name, caption='Article '..article.system_name})
 
   page:render('article/revisions', {article=article, revisions=revisions})
 end

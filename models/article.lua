@@ -18,7 +18,7 @@ end
 local article = {
   attributes = {
     -- implement .optional() !!!
-    { id = valua:new().number().optional() },
+    -- { id = valua:new().number().optional() },
     { name = 'safe' },
     -- TODO implement pattern validation! a-zA-Z0-9\-_ are allowed for this case
     { system_name = valua:new().match("^[%d%l_-]+$").not_empty() },
@@ -36,7 +36,7 @@ local article = {
     -- global_id uuid DEFAULT public.uuid_generate_v4() NOT NULL
   },
   db = {
-    key = 'id',
+    key = 'system_name',
     table = 'article',
   },
 
@@ -78,7 +78,7 @@ end
 -- TODO to sailor.model to run automatically (?)
 article.before_update = function(self)
   local ModelClass = article.get_model()
-  local model_in_db = ModelClass:find_by_id(self.id)
+  local model_in_db = ModelClass:find_by_id(self.system_name)
 
   if model_in_db.revision == self.revision then
     local new_revision = false
@@ -99,7 +99,7 @@ end
 
 article.after_save = function(self)
   local ModelClass = article.get_model()
-  local updated_model = ModelClass:find_by_id(self.id)
+  local updated_model = ModelClass:find_by_id(self.system_name)
   -- TODO loop by attributes
   self.revision = updated_model.revision
   self.modify_time = updated_model.modify_time
