@@ -60,7 +60,7 @@ M.article_new = function(page)
     article:from_post(page.POST)
 
     if article:save() then
-      page:redirect('/admin/article_edit?id=' .. article.id)
+      page:redirect('/admin/article_edit?pk=' .. article.system_name)
     else
       ers = article.errors
     end

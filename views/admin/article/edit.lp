@@ -44,7 +44,9 @@
     <span class="help-block"> <?= article.errors.content or '' ?> </span>
   </div>
 
-  <p><a href="/admin/article_revisions?global_id=<?= article.global_id ?>">article revisions</a></p>
+  <?lua if article.global_id then ?>
+    <p><a href="/admin/article_revisions?global_id=<?= article.global_id ?>">article revisions</a></p>
+  <?lua end ?>
 
   <div class="form-group">
     <?= form.checkbox(article, 'active', 'Active', false, [[]]) ?>

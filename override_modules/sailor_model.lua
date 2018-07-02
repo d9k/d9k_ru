@@ -186,22 +186,35 @@ function model:insert()
 	local values = {}
 	for _,n in pairs(self.attributes) do
 		for attr,_ in pairs(n) do
-			if attr ~= self.db.key then
-				table.insert(attrs,attr)
-				if self[attr] == nil then
-					table.insert(values,"null")
-				elseif type(self[attr]) == 'number' then
-					table.insert(values,self[attr])
-				elseif type(self[attr]) == 'boolean' then
-					table.insert(values,tostring(self[attr]))
-        -- mod BEGIN
-        elseif attr_is_raw_sql(self[attr]) then
-          table.insert(self[attr].value)
-        -- END mod
-				else
-					table.insert(values,"'"..db.escape(self[attr]).."'")
-				end
-			end
+      -- mod BEGIN
+      local skip = false
+
+      -- if attr == self.db.key and
+      if self[attr] == nil then
+        skip = true
+      end
+
+      if not skip then
+--        if attr ~= self.db.key then
+      -- mod END
+          table.insert(attrs,attr)
+          if self[attr] == nil then
+            table.insert(values,"null")
+          elseif type(self[attr]) == 'number' then
+            table.insert(values,self[attr])
+          elseif type(self[attr]) == 'boolean' then
+            table.insert(values,tostring(self[attr]))
+          -- mod BEGIN
+          elseif attr_is_raw_sql(self[attr]) then
+            table.insert(self[attr].value)
+          -- END mod
+          else
+            table.insert(values,"'"..db.escape(self[attr]).."'")
+          end
+      -- mod BEGIN
+--        end
+      -- END mod
+      end -- not continue
 		end
 	end
 	local attr_string = table.concat (attrs, ',')
@@ -210,7 +223,11 @@ function model:insert()
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..")"
 
 	local id = db.query_insert(query,key)
-	self[key] = id
+  -- mod BEGIN
+  if id ~= nil then
+    self[key] = id
+  end
+  -- END mod
 	db_close()
 	return true
 end

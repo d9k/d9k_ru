@@ -101,6 +101,7 @@ article.after_save = function(self)
   local ModelClass = article.get_model()
   local updated_model = ModelClass:find_by_id(self.system_name)
   -- TODO loop by attributes
+  self.global_id = updated_model.global_id -- after insert
   self.revision = updated_model.revision
   self.modify_time = updated_model.modify_time
   -- TODO save to file
