@@ -10,6 +10,7 @@ admin.before = function(page)
   local user = sailor_helpers.get_user()
   if user == nil then
     page.r.status = 401
+    page.controller_view_path = 'views/'
     page:render('error/unauthorised')
     return false
   end
