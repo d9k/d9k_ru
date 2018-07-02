@@ -101,7 +101,7 @@ function sailor.route(page)
         local ctr, controller_load_error = require_controller(controller)
 
         if not ctr then
-          if controller_load_error:match[[module '[%a%d%.]+' not found]] then
+          if controller_load_error:match[[module '[%a%d%._-]+' not found]] then
             controller = 'not_found'
             ctr = require_controller(controller)
             controller_not_found = true
