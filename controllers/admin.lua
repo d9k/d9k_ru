@@ -7,12 +7,9 @@ local admin = table_helpers.merge(
 
 -- runs before every admin action
 admin.before = function(page)
-  local user = sailor_helpers.get_user()
-  if user == nil then
-    page.r.status = 401
-    page.controller_view_path = 'views/'
-    page:render('error/unauthorised')
-    return false
+
+  if sailor_helpers.render_error_if_not_logined(page) then
+    return
   end
 
   page.breadcrumbs = {{url='/admin', caption='Admin'}}

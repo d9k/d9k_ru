@@ -52,11 +52,7 @@ function test.url_params(page)
 end
 
 function test.lastfm(page)
-
-  local user = sailor_helpers.get_user()
-  if user == nil then
-    page.r.status = 401
-    page:render('../error/unauthorised')
+  if sailor_helpers.render_error_if_not_logined(page) then
     return
   end
 
@@ -85,6 +81,23 @@ function test.lastfm(page)
   sailor.log:info('test/lastfm: lastfm.user_get_recent_tracks: '..pretty_format(result))
 
   page:render('lastfm', {response_dump = pretty_format(response)})
+end
+
+function test.lastfm_cached(page)
+  if sailor_helpers.render_error_if_not_logined(page) then
+    return
+  end
+
+  local cached_api = require 'local_libs.cached_api'
+
+  local recent_tracks, cached = cached_api.lastfm_recent_tracks()
+
+--  sailor.log:info('test/lastfm: lastfm.user_get_recent_tracks: '..pretty_format(result))
+
+  page:render('lastfm_cached', {
+    recent_tracks = pretty_format(recent_tracks),
+    cached = cached
+  })
 end
 
 function test.not_found(page, action)

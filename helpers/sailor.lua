@@ -1,6 +1,6 @@
 -- TODO mod sailor.access
 
-M = {}
+local M = {}
 
 M.get_user = function()
   local access = require 'access'
@@ -13,6 +13,17 @@ M.get_user = function()
   end
 
   return user
+end
+
+M.render_error_if_not_logined = function(page)
+  local user = M.get_user()
+  if user == nil then
+    page.r.status = 401
+    page.controller_view_path = 'views/'
+    page:render('error/unauthorised')
+    return true
+  end
+  return false
 end
 
 return M

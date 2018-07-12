@@ -91,7 +91,7 @@
 
       <!-- Begin page content -->
       <div class="container">
-        <?lua if page.breadcrumbs then ?>
+        <?lua if page.breadcrumbs and page.breadcrumbs[1] then ?>
           <ul class="breadcrumb">
             <?lua for i, b_crumb in ipairs(page.breadcrumbs) do ?>
               <li><a href="<?= b_crumb.url ?>"
