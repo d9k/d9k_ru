@@ -11,3 +11,4 @@ syntax: regexp
 ^runtime\/tmp\/
 ^runtime\/backup_models\/
 ^conf\/private_conf\.lua$
+^node_modules/
