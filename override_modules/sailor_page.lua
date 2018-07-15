@@ -101,6 +101,12 @@ function Page:include(path,parms)
     render_page(path,parms,incl_src)
 end
 
+-- mod BEGIN
+function Page:get_theme_folder()
+  self.theme_path = self.base_path.."/themes/"..self.theme
+  return ( (sailor.path):match('(.*)' .. self.base_path:gsub('-','%%-') ) or '' ) .. self.theme_path
+end
+-- END mod
 
 -- Renders a view from a controller action
 -- filename: string, filename without ".lp". The file must be inside /views/<controller name>
@@ -113,8 +119,12 @@ function Page:render(filename,parms,src)
 
     -- If there's a default theme, parse the theme first
     if self.theme ~= nil and self.theme ~= '' then
-        self.theme_path = self.base_path.."/themes/"..self.theme
-        filepath = ((sailor.path):match('(.*)'..self.base_path:gsub('-','%%-') ) or '')..self.theme_path.."/"..self.layout
+
+        -- mod BEGIN
+--                self.theme_path = self.base_path.."/themes/"..self.theme
+--        filepath = ((sailor.path):match('(.*)'..self.base_path:gsub('-','%%-') ) or '')..self.theme_path.."/"..self.layout
+        filepath = self:get_theme_folder() .."/"..self.layout
+        -- END mod
 
         local theme_src = read_src(filepath)
         local filename_var = "sailor_filename_"..tostring(random(1000))

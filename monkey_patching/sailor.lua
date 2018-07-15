@@ -37,10 +37,38 @@ end
 function sailor.route(page)
     local error_404, error_handler
 
+    local require_lua_file = function (dotted_path)
+      local status, err_or_result = pcall(function() return require(dotted_path) end)
+      if status then
+        local result = err_or_result
+        return result
+      else
+        local _error = err_or_result
+        return status, _error
+      end
+    end
+
     -- breaking compatibility with apache
 --    apache_friendly_url(page)
 
     local route_name = page.GET[conf.sailor.route_parameter]
+
+    -- mod BEGIN
+--    local theme_folder = page:get_theme_folder()
+    local theme_callbacks_dotted_path = 'themes.' .. page.theme .. '.callbacks'
+    local theme_callbacks, callbacks_load_error = require_lua_file(theme_callbacks_dotted_path)
+
+    if theme_callbacks then
+      if theme_callbacks.before_controller then
+        theme_callbacks.before_controller(page)
+      end
+    else
+      if not callbacks_load_error:match[[module '[%a%d%._-]+' not found]] then
+        error(callbacks_load_error)
+      end
+    end
+
+    -- END mod
 
     page.breadcrumbs = {}
 
@@ -73,6 +101,18 @@ function sailor.route(page)
     else
         local controller, action
 
+        local require_controller = function(controller_name)
+    --          local status, err_or_result = pcall(function() return require("controllers."..controller) end)
+    --          if status then
+    --            local result = err_or_result
+    --            return result
+    --          else
+    --            local _error = err_or_result
+    --            return status, _error
+    --          end
+          return require_lua_file('controllers.' .. controller)
+        end
+
         if not route_name or route_name == '' then
             controller, action = conf.sailor.default_controller, conf.sailor.default_action
         else
@@ -85,18 +125,6 @@ function sailor.route(page)
                 return res or httpd.OK or page.r.status or 200
             end
             return error_404()
-        end
-
-        -- return error
-        local require_controller = function(controller_name)
-          local status, err_or_result = pcall(function() return require("controllers."..controller) end)
-          if status then
-            local result = err_or_result
-            return result
-          else
-            local _error = err_or_result
-            return status, _error
-          end
         end
 
         local controller_not_found = false
