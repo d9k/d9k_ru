@@ -101,6 +101,16 @@
           </ul>
         <?lua end ?>
 
+        <script src="<%=page.theme_path%>/js/jquery-1.10.2.min.js"></script>
+        <script src="<%=page.theme_path%>/js/bootstrap.min.js"></script>
+        <script src="<%=page.theme_path%>/js/mithril_1_1_6.js"></script>
+
+        <script src="<%=page.theme_path%>/js/docready.js"></script>
+        <script src="<%=page.theme_path%>/js/store.js"></script>
+        <script src="<%=page.theme_path%>/js/uiComponents.js"></script>
+        <script src="<%=page.theme_path%>/js/counter.js"></script>
+        <script src="<%=page.theme_path%>/js/onDocReady.js"></script>
+
         {{content}}
       </div>
     </div>
@@ -114,11 +124,5 @@
       </div>
     </div>
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="<%=page.theme_path%>/js/jquery-1.10.2.min.js"></script>
-    <script src="<%=page.theme_path%>/js/bootstrap.min.js"></script>
   </body>
 </html>

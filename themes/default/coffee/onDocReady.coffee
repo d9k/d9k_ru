@@ -1,0 +1,3 @@
+docReady ->
+
+  window.uiComponents.mountToDom()
