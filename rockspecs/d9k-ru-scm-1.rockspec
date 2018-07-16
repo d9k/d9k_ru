@@ -28,6 +28,7 @@ dependencies = {
    "penlight >= 1.5",
    "inspect",
    "luautf8",
+   "redis-lua",
 }
 build = {
    type = "builtin",
