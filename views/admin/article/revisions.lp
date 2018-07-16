@@ -50,7 +50,7 @@
 
     <!-- <div class="form-group">
       <label>name</label>
-      <p><?= revision.name ?></p>
+      <p><?= revision.name or '&lt;empty&gt;' ?></p>
     </div> -->
 
     <div class="form-group">
