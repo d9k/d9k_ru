@@ -4,10 +4,10 @@
   var LastfmRecent;
 
   LastfmRecent = {
-    oninit: function oninit(vnode) {
+    AUTO_UPDATE_TIMEOUT_SEC: 5,
+    initAttrs: function initAttrs() {
       var attrs;
-      this.domElementId = vnode.attrs.domElementId;
-      attrs = storeGet('ui.' + this.domElementId);
+      attrs = this.getAttrs();
       if (attrs.recentTracksStorePath == null) {
         attrs.recentTracksStorePath = 'lastfm.recent';
       }
@@ -15,8 +15,50 @@
       if (attrs.serverRequestUrl == null) {
         attrs.serverRequestUrl = '/components/lastfm_recent';
       }
-      attrs.updateIntervalSec = 30;
-      storeSet('ui.' + this.domElementId, attrs);
+      if (attrs.updateIntervalSec == null) {
+        attrs.updateIntervalSec = 30;
+      }
+      this.setAttrs(attrs);
+      return attrs;
+    },
+    getAttrs: function getAttrs() {
+      return storeGet('ui.' + this.domElementId);
+    },
+    setAttrs: function setAttrs(attrs) {
+      return storeSet('ui.' + this.domElementId, attrs);
+    },
+    setAutoUpdateTimer: function setAutoUpdateTimer() {
+      var attrs;
+      attrs = this.getAttrs();
+      clearTimeout(this.autoUpdateTimer);
+      if (attrs.updateIntervalSec) {
+        return setTimeout(this.onAutoUpdateTimer.bind(this), attrs.updateIntervalSec * 1000);
+      }
+    },
+    onAutoUpdateTimer: function onAutoUpdateTimer() {
+      var attrs, self;
+      attrs = this.getAttrs();
+      self = this;
+      if (attrs.updateIntervalSec) {
+        return m.request({
+          method: "GET",
+          url: attrs.serverRequestUrl,
+          timeout: this.AUTO_UPDATE_TIMEOUT_SEC
+          //data: {}
+        }).then(function (result) {
+          console.log('LastFmRecent mithril component onAutoUpdateTimer ajax updated');
+          console.log('updated data: ' + JSON.stringify(result));
+          return self.setAutoUpdateTimer();
+        }).catch(function (e) {
+          console.log('LastFmRecent mithril component onAutoUpdateTimer ajax error: ' + e.message);
+          return self.setAutoUpdateTimer();
+        });
+      }
+    },
+    oninit: function oninit(vnode) {
+      this.domElementId = vnode.attrs.domElementId;
+      this.initAttrs();
+      this.onAutoUpdateTimer();
     },
     //if vnode.attrs.updateIntervalSec
 

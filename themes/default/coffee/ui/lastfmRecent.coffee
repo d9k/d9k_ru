@@ -1,15 +1,62 @@
 
 LastfmRecent =
 
-  oninit: (vnode) ->
-    @domElementId = vnode.attrs.domElementId
-    attrs = storeGet('ui.' + @domElementId )
+  AUTO_UPDATE_TIMEOUT_SEC: 5,
 
+  initAttrs: () ->
+    attrs = @getAttrs()
     attrs.recentTracksStorePath ?= 'lastfm.recent'
     # attrs.recentMetaStorePath
     attrs.serverRequestUrl ?= '/components/lastfm_recent'
-    attrs.updateIntervalSec = 30
+    attrs.updateIntervalSec ?= 30
+    @setAttrs(attrs)
+
+    return attrs
+
+  getAttrs: () ->
+    return storeGet('ui.' + @domElementId )
+
+  setAttrs: (attrs) ->
     storeSet('ui.' + @domElementId, attrs)
+
+  setAutoUpdateTimer: () ->
+    attrs = @getAttrs()
+
+    clearTimeout(@autoUpdateTimer)
+    if attrs.updateIntervalSec
+      setTimeout(
+        @onAutoUpdateTimer.bind(@),
+        attrs.updateIntervalSec * 1000
+      )
+
+  onAutoUpdateTimer: () ->
+    attrs = @getAttrs()
+
+    self = @
+
+    if attrs.updateIntervalSec
+      m.request({
+        method: "GET",
+        url: attrs.serverRequestUrl,
+        timeout: @AUTO_UPDATE_TIMEOUT_SEC,
+        #data: {}
+      })
+      .then(
+        (result) ->
+          console.log 'LastFmRecent mithril component onAutoUpdateTimer ajax updated'
+          console.log 'updated data: ' + JSON.stringify(result)
+          self.setAutoUpdateTimer()
+      )
+      .catch(
+        (e) ->
+          console.log 'LastFmRecent mithril component onAutoUpdateTimer ajax error: ' + e.message
+          self.setAutoUpdateTimer()
+      )
+
+  oninit: (vnode) ->
+    @domElementId = vnode.attrs.domElementId
+    @initAttrs()
+    @onAutoUpdateTimer()
 
     #if vnode.attrs.updateIntervalSec
 
