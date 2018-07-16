@@ -24,7 +24,7 @@ M = {
     componentType = M.types[instanceData.type]
     instanceData.domElementId = elementId
 
-    componentType.initAttrs(instanceData)
+    #componentType.initAttrs(instanceData)
 
     storeSet('ui.' + element.id, instanceData)
 

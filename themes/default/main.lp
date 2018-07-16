@@ -108,9 +108,9 @@
         <script src="<%=page.theme_path%>/js/docready.js"></script>
         <script src="<%=page.theme_path%>/js/store.js"></script>
         <script src="<%=page.theme_path%>/js/uiComponents.js"></script>
-        <script src="<%=page.theme_path%>/js/counter.js"></script>
+        <script src="<%=page.theme_path%>/js/ui/counter.js"></script>
+        <script src="<%=page.theme_path%>/js/ui/lastfmRecent.js"></script>
         <script src="<%=page.theme_path%>/js/onDocReady.js"></script>
-
         {{content}}
       </div>
     </div>

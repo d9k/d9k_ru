@@ -1,3 +1,6 @@
+<?lua
+  local table_helpers = require 'helpers.table'
+?>
 
 <h2>Article <?= article.system_name ?> history</h2>
 
@@ -23,12 +26,19 @@
 
 <div class="form-group">
   <label>Current content</label>
-  <textarea cols="80" rows="5" readonly class="form-control"><?= article.content ?></textarea>
+  <textarea cols="80" rows="14" readonly class="form-control" style="font-size: 11px"><?= article.content ?></textarea>
 </div>
 
 <h3>Another revisions</h3>
 
-<?lua for revision_path, revision in pairs(revisions) do ?>
+<?lua
+  local sorted_revisions_keys = table_helpers.sorted_keys(revisions, function(t, a, b)
+    return a > b
+  end)
+?>
+
+<?lua for _, revision_path in ipairs(sorted_revisions_keys) do ?>
+  <?lua local revision = revisions[revision_path] ?>
   <?lua if article.revision ~= revision.revision then ?>
 
     <h4><?= revision.modify_time ?> <small>(<?= revision.revision ?>)</small></h4>
@@ -45,7 +55,7 @@
 
     <div class="form-group">
       <label>Content</label>
-      <textarea cols="80" rows="5" readonly class="form-control"><?= revision.content ?></textarea>
+      <textarea cols="80" rows="14" readonly class="form-control"  style="font-size: 11px"><?= revision.content ?></textarea>
     </div>
 
     <p>

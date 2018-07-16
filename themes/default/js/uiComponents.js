@@ -29,7 +29,7 @@
       //instanceData = {}
       componentType = M.types[instanceData.type];
       instanceData.domElementId = elementId;
-      componentType.initAttrs(instanceData);
+      //componentType.initAttrs(instanceData)
       storeSet('ui.' + element.id, instanceData);
       return m.mount(element, {
         view: function view() {
