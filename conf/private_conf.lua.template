@@ -15,7 +15,18 @@ private_conf = {
     -- default_login = 'admin',	    -- Default login details
     -- default_password = 'demo123',
   },
-
+  lastfm = {
+    lastfm_api_key = '',
+    lastfm_shared_secret = '',
+    lastfm_api_login = '',
+    lastfm_api_password = '',
+    site_author_lastfm_login = ''
+  },
+  redis = {
+//    port = ,
+//    password = ,
+//    db = ,
+  },
 }
 
 return private_conf
