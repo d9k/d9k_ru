@@ -23,9 +23,9 @@ private_conf = {
     site_author_lastfm_login = ''
   },
   redis = {
-#     port = ,
-#     password = ,
-#     db = ,
+--    port = ,
+--    password = ,
+--    db = ,
   },
 }
 
