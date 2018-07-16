@@ -9,6 +9,7 @@ LastfmRecent =
     # attrs.recentMetaStorePath
     attrs.serverRequestUrl ?= '/components/lastfm_recent'
     attrs.updateIntervalSec ?= 30
+    attrs.tracksCount ?= 7
     @setAttrs(attrs)
 
     return attrs
@@ -44,7 +45,9 @@ LastfmRecent =
       .then(
         (result) ->
           console.log 'LastFmRecent mithril component onAutoUpdateTimer ajax updated'
-          console.log 'updated data: ' + JSON.stringify(result)
+          #console.log 'updated data: ' + JSON.stringify(result)
+          self.setData(result)
+          m.render()
           self.setAutoUpdateTimer()
       )
       .catch(
@@ -52,6 +55,12 @@ LastfmRecent =
           console.log 'LastFmRecent mithril component onAutoUpdateTimer ajax error: ' + e.message
           self.setAutoUpdateTimer()
       )
+
+  getData: () ->
+    return storeGet(@getAttrs().recentTracksStorePath) or {}
+
+  setData: (data) ->
+    storeSet(@getAttrs().recentTracksStorePath, data)
 
   oninit: (vnode) ->
     @domElementId = vnode.attrs.domElementId
@@ -80,7 +89,7 @@ LastfmRecent =
     return
 
   view: (vnode) ->
-    attrs = storeGet('ui.' + @domElementId )
+    attrs = @getAttrs()
 
     #console.log(JSON.stringify(vnode.attrs) + ' rerender')
     self = this
@@ -94,7 +103,7 @@ LastfmRecent =
       #return
     #}, self.count_path + ': ' + storeGet(self.count_path)
 
-    recentTracks = storeGet(attrs.recentTracksStorePath) or {}
+    data = @getData()
     #userName = userInfo.name or 'unknown user'
     #userScrobblesCount = userInfo.scrobblesCount or '?'
 
@@ -112,13 +121,35 @@ LastfmRecent =
     #,
     #)
 
+    tracksLines = []
 
-    <div style="border: 1px solid grey; display: inline-block; padding: 7px; min-height: 200px">
-      <h4>Последние трэки на lastfm</h4>
-      {[
-        <p>te</p>
-        <p>st</p>
-      ]}
+    if data.recenttracks?.track
+      showedTracksCount = 0
+
+      for track in data.recenttracks.track
+
+        if track['@attr']?.nowplaying
+          continue
+
+        tracksLines.push <p style="margin-bottom: 3px; margin-top: 3px;">
+          <small>{track.artist.name} - {track.name}</small>
+        </p>
+
+        showedTracksCount++
+
+        if showedTracksCount >= attrs.tracksCount
+          break
+
+    userName = data.recenttracks?['@attr']?.user
+
+    userLink = '. . .'
+
+    if userName
+      userLink = ['пользователя ', <a href={'https://last.fm/user/' + userName} target="_blank">{userName}</a>]
+
+    <div style="min-height: 200px; min-width: 350px; border: 1px solid grey; display: inline-block; padding: 7px;">
+      <h5>Последние трэки на lastfm {userLink}</h5>
+      {tracksLines}
     </div>
 
 
