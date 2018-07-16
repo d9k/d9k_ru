@@ -47,7 +47,7 @@ LastfmRecent =
           console.log 'LastFmRecent mithril component onAutoUpdateTimer ajax updated'
           #console.log 'updated data: ' + JSON.stringify(result)
           self.setData(result)
-          m.render()
+          m.redraw()
           self.setAutoUpdateTimer()
       )
       .catch(

@@ -52,7 +52,7 @@
           console.log('LastFmRecent mithril component onAutoUpdateTimer ajax updated');
           //console.log 'updated data: ' + JSON.stringify(result)
           self.setData(result);
-          m.render();
+          m.redraw();
           return self.setAutoUpdateTimer();
         }).catch(function (e) {
           console.log('LastFmRecent mithril component onAutoUpdateTimer ajax error: ' + e.message);
