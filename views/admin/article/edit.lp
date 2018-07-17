@@ -2,6 +2,7 @@
 
 <?lua if article.system_name then ?>
   <h1>Article <?= article.system_name ?> edit</h1>
+  <p><a href="<?= article:build_url() ?>">see on site</a></p>
 <?lua else ?>
   <h1>New article</h1>
 <?lua end ?>

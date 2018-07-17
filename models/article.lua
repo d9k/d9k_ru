@@ -110,6 +110,14 @@ article.after_save = function(self)
   self:save_backups()
 end
 
+article.build_url = function(self)
+  if self.url_alias then
+    return '/' .. self.url_alias
+  end
+
+  return '/article/' .. self.system_name
+end
+
 backup_mixin.mixin(article)
 
 return article
