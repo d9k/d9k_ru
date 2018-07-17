@@ -9,7 +9,7 @@ local log_from_config = require 'log_from_config'
 local redis_adapter = require 'local_libs.redis_adapter'
 
 --require 'monkey_patching.sailor_page'
-require 'override_modules.override_map'
+
 --require 'monkey_patching.sailor_db_luasql_common'
 require 'monkey_patching.sailor'
 
@@ -19,5 +19,25 @@ require 'monkey_patching.sailor'
 sailor.log = log_from_config.log_from_config(conf.log)
 sailor.redis = redis_adapter(conf.redis)
 
+sailor.before_launch = function ()
+--  sailor.log:info('before launch')
+
+  -- models variables are cached by xavante
+  -- reset due to fields in modules cache
+  package.loaded['sailor.access'] = nil
+  package.loaded['sailor.session'] = nil
+  package.loaded['override_modules.sailor_session'] = nil
+  package.loaded['web_utils.session'] = nil
+  package.loaded['override_modules.override_map'] = nil
+
+  require 'override_modules.override_map'
+end
+
+sailor.after_init = function ()
+--  sailor.log:info('after init')
+
+  local access = require 'sailor.access'
+  access.settings(conf['access_module'])
+end
 
 sailor.launch()

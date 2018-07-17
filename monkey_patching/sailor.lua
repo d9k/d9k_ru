@@ -188,3 +188,41 @@ function sailor.route(page)
         return res or httpd.OK or page.r.status or 200
     end
 end
+
+function sailor.launch(native_request)
+--    print('on sailor_launch')
+--    local inspect = require 'inspect'
+--    print('on sailor_launch: sailor.access: ' .. inspect(package.loaded['sailor.access']))
+--    package.loaded['sailor.access'] = nil
+
+    print('overriden sailor launch')
+
+    if sailor.before_launch then
+      sailor.before_launch()
+    end
+
+    if apr_table ~= nil then
+        -- This is Apache with mod_lua
+        -- Sets a handle function to be called by mod_lua
+        httpd = apache2
+        handle = sailor.handle_request
+    else
+        -- This is a non-Apache (such as Nginx, Lighttpd, etc) or
+        -- Apache with CGILua or mod_pLua
+        -- Handled by Remy extension
+        httpd = remy.httpd
+        sailor.remy_mode = remy.init(sailor.remy_mode, native_request)
+        remy.contentheader('text/html')
+        remy.run(sailor.handle_request)
+    end
+end
+
+
+function sailor.handle_request(r)
+    r.content_type = "text/html"
+    local page = sailor.init(r)
+    if sailor.after_init then
+      sailor.after_init()
+    end
+    return sailor.route(page)
+end

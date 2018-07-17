@@ -15,6 +15,8 @@ local ID_NAME = "SAILORSESSID"
 
 session.id = nil
 
+--sailor.log:info('sailor session overriden reloaded')
+
 local sailor_init_complete = false
 
 session.after_sailor_init = function()
@@ -37,12 +39,21 @@ end
 
 function session.open (r)
   session.after_sailor_init()
+--  local log = function(s)
+--    sailor.log:info('session.open: ' .. s)
+--  end
+
+--  log('start')
+  local inspect = require 'inspect'
+
+--  log('session id: ' .. inspect(session.id))
 
 	if session.id then
 		return session.id
 	end
 
-	local id = cookie.get(r,ID_NAME )
+	local id = cookie.get(r, ID_NAME)
+--  log('id after cookie get: ' .. (id or ''))
     if not id then
         session.new(r)
     else
@@ -55,7 +66,10 @@ function session.open (r)
     end
 
 	session.cleanup()
-	return id
+--  log('end '..session.id)
+  -- bug! there was:
+  -- return id
+	return session.id
 end
 
 function session.destroy (r)
@@ -81,6 +95,7 @@ end
 
 local save = session.save
 function session.save(data)
+--  sailor.log:info('session.save to '..session.id)
   session.after_sailor_init()
 
 	save(session.id,data)

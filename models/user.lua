@@ -2,7 +2,7 @@
 
 local user = {}
 local val = require 'valua'
-local access = require 'sailor.access'
+--local access = require 'sailor.access'
 
 -- Attributes and their validation rules
 user.attributes = {
@@ -24,6 +24,8 @@ user.relations = {
 
 -- Public Methods
 --function user.test() return "test" end
+
+-- TODO! access must be required locally because is cached by xavante
 
 --function user.authenticate(login,password,use_hashing)
 --	if use_hashing == nil then use_hashing = true end

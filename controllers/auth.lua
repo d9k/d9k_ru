@@ -1,5 +1,3 @@
-local access = require 'access'
-local session = require 'sailor.session'
 local pformat = require 'thirdparty_libs.pprint'.pformat
 
 --local conf = require 'conf.conf'
@@ -9,6 +7,9 @@ local pformat = require 'thirdparty_libs.pprint'.pformat
 local auth = {}
 
 function auth.login(page)
+  -- modules are not reloaded so reload again in action
+  local access = require 'sailor.access'
+  local session = require 'sailor.session'
 
   local login = page.POST.login or ''
   local password = page.POST.password or ''
@@ -30,6 +31,8 @@ function auth.login(page)
 end
 
 function auth.logout(page)
+  local access = require 'sailor.access'
+  local session = require 'sailor.session'
   access.logout()
 
   page:render('login', {logout = true, session_data = session_data})

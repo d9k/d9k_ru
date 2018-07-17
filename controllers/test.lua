@@ -10,7 +10,7 @@ local pretty_format = require "thirdparty_libs.pprint".pformat
 --if breakpoints then require('mobdebug').start('127.0.0.1') end
 
 local sailor = require 'sailor'
-local access = require 'sailor.access'
+
 local db = require 'sailor.db'
 local sailor_helpers = require 'helpers.sailor'
 local json = require('cjson')
