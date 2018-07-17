@@ -21,11 +21,17 @@ Then install luasql-postgres manually!
 
 ## Database
 
+d9k.ru uses postgresql as database management system.
+
 At first create database and user with permissions for this database.
 The login to created database with psql with superuser (!) and run the following:
 
     CREATE EXTENSION IF NOT EXISTS plpgsql;
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+Database migrationgs are handled with
+
+    https://bitbucket.org/d9kd9k/db_tools
 
 ## Autostart daemon
 
