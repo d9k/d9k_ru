@@ -25,6 +25,8 @@ sailor.before_launch = function ()
   -- models variables are cached by xavante
   -- reset due to fields in modules cache
   package.loaded['sailor.access'] = nil
+  package.loaded['sailor.cookie'] = nil
+  package.loaded['cgilua.cookies'] = nil
   package.loaded['sailor.session'] = nil
   package.loaded['override_modules.sailor_session'] = nil
   package.loaded['web_utils.session'] = nil
@@ -37,6 +39,8 @@ sailor.after_init = function ()
 --  sailor.log:info('after init')
 
   local access = require 'sailor.access'
+  local session = require 'sailor.session'
+  session.after_sailor_init()
   access.settings(conf['access_module'])
 end
 

@@ -17,12 +17,12 @@ session.id = nil
 
 --sailor.log:info('sailor session overriden reloaded')
 
-local sailor_init_complete = false
+--local sailor_init_complete = false
 
 session.after_sailor_init = function()
-  if sailor_init_complete then
-    return
-  end
+--  if sailor_init_complete then
+--    return
+--  end
 
   local conf = require 'conf.conf'
 
@@ -32,28 +32,28 @@ session.after_sailor_init = function()
   if conf.access_module and conf.access_module.grant_time then
     session.setsessiontimeout(conf.access_module.grant_time)
   end
-  sailor_init_complete = true
+--  sailor_init_complete = true
 end
 
 
 
 function session.open (r)
   session.after_sailor_init()
---  local log = function(s)
---    sailor.log:info('session.open: ' .. s)
---  end
+  local log = function(s)
+    sailor.log:info('session.open: ' .. s)
+  end
 
---  log('start')
+  log('start')
   local inspect = require 'inspect'
 
---  log('session id: ' .. inspect(session.id))
+  log('session id: ' .. inspect(session.id))
 
 	if session.id then
 		return session.id
 	end
 
 	local id = cookie.get(r, ID_NAME)
---  log('id after cookie get: ' .. (id or ''))
+  log('id after cookie get: ' .. (id or ''))
     if not id then
         session.new(r)
     else
@@ -66,7 +66,7 @@ function session.open (r)
     end
 
 	session.cleanup()
---  log('end '..session.id)
+  log('end '..session.id)
   -- bug! there was:
   -- return id
 	return session.id
@@ -91,6 +91,9 @@ function session.new(r)
 	session.id = new()
 	session.data = {}
     cookie.set(r,ID_NAME,session.id)
+  -- mod BEGIN
+  session.save(session.data)
+  -- END mod
 end
 
 local save = session.save
