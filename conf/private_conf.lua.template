@@ -22,6 +22,10 @@ private_conf = {
     lastfm_api_password = '',
     site_author_lastfm_login = ''
   },
+  flickr = {
+    api_key = '',
+    site_author_user_id = '',
+  },
   redis = {
 --    port = ,
 --    password = ,
