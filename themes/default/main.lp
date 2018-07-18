@@ -120,8 +120,11 @@
     <div id="footer">
       <div class="container">
       	<!-- Yes, you are allowed to remove this -->
-        <p class="text-muted">© 2014 Etiene Dalcol. Powered by <a href="http://sailorproject.org" target="_blank">Sailor MVC</a>
-        and <a href="http://lua.org" target="_blank">Lua</a>
+        <p class="text-muted">
+          Powered with
+          <a href="http://sailorproject.org" target="_blank">Sailor framework</a>
+          (made by <a href="https://twitter.com/etiene_d" target="_blank">Etiene Dalcol</a>)
+          and <a href="http://lua.org" target="_blank">Lua</a>
         </p>
       </div>
     </div>
