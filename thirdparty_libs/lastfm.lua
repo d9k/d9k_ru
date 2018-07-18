@@ -7,7 +7,7 @@ local md5 = require 'md5'.sumhexa
 local requests = require 'requests'
 local pretty_format = require "thirdparty_libs.pprint".pformat
 
-M = {
+local M = {
   LAST_FM_API_URL = 'https://ws.audioscrobbler.com/2.0/',
   log_function = nil,
   log_enabled = true,
@@ -107,7 +107,7 @@ M.user_get_recent_tracks = function(lastfm_api_key, username, limit)
   local url = M.LAST_FM_API_URL .. '?' .. net_url.buildQuery(arguments)
   M.log(log_prefix .. 'request url: ' .. url)
 
-  response = requests.get(url)
+  local response = requests.get(url)
 
   return response
 end

@@ -1,0 +1,7 @@
+.flickrLastPhotosComponent img {
+  opacity: 0.5
+}
+
+.flickrLastPhotosComponent img:hover {
+  opacity: 1
+}
